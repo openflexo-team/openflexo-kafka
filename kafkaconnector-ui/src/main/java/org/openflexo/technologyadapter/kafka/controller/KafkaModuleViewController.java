@@ -6,7 +6,7 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
 
 /**
- * Controller for JDBC Module
+ * Controller for Kafka Module
  */
 public class KafkaModuleViewController extends FlexoFIBController {
 

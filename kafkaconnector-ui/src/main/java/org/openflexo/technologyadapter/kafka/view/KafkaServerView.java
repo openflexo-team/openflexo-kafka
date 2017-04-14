@@ -33,12 +33,12 @@ import org.openflexo.view.controller.model.FlexoPerspective;
  */
 public class KafkaServerView extends FIBModuleView<KafkaServer> {
 
-	public static Resource JDBC_MODULE_VIEW_FIB = ResourceLocator.locateResource("Fib/KafkaModuleView.fib");
+	public static Resource KAFKA_MODULE_VIEW_FIB = ResourceLocator.locateResource("Fib/KafkaModuleView.fib");
 
 	private final FlexoPerspective perspective;
 
 	public KafkaServerView(KafkaServer server, FlexoController controller, FlexoPerspective perspective) {
-		super(server, controller, JDBC_MODULE_VIEW_FIB, controller.getTechnologyAdapter(FMLRTTechnologyAdapter.class).getLocales());
+		super(server, controller, KAFKA_MODULE_VIEW_FIB, controller.getTechnologyAdapter(FMLRTTechnologyAdapter.class).getLocales());
 		this.perspective = perspective;
 	}
 

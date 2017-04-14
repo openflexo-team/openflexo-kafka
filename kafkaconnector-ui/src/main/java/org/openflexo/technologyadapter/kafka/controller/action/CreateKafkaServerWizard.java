@@ -60,17 +60,17 @@ public class CreateKafkaServerWizard extends FlexoWizard {
 
 	private final CreateKafkaServer action;
 
-	private final ConfigureJdbcConnection configureJdbcConnection;
+	private final ConfigureKafkaServer configureKafkaServer;
 
 	public CreateKafkaServerWizard(CreateKafkaServer action, FlexoController controller) {
 		super(controller);
 		this.action = action;
-		addStep(configureJdbcConnection = new ConfigureJdbcConnection());
+		addStep(configureKafkaServer = new ConfigureKafkaServer());
 	}
 
 	@Override
 	public String getWizardTitle() {
-		return action.getLocales().localizedForKey("create_jdbc_model");
+		return action.getLocales().localizedForKey("create_kafka_server");
 	}
 
 	@Override
@@ -79,8 +79,8 @@ public class CreateKafkaServerWizard extends FlexoWizard {
 		return IconFactory.getImageIcon(FMLIconLibrary.FLEXO_CONCEPT_BIG_ICON, IconLibrary.NEW_32_32).getImage();
 	}
 
-	public ConfigureJdbcConnection getConfigureJdbcConnection() {
-		return configureJdbcConnection;
+	public ConfigureKafkaServer getConfigureKafkaServer() {
+		return configureKafkaServer;
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class CreateKafkaServerWizard extends FlexoWizard {
 	 *
 	 */
 	@FIBPanel("Fib/Wizard/ConfigureKafkaServer.fib")
-	public class ConfigureJdbcConnection extends WizardStep {
+	public class ConfigureKafkaServer extends WizardStep {
 
 		public ApplicationContext getServiceManager() {
 			return getController().getApplicationContext();
@@ -102,14 +102,14 @@ public class CreateKafkaServerWizard extends FlexoWizard {
 
 		@Override
 		public String getTitle() {
-			return action.getLocales().localizedForKey("configure_jdbc_connection");
+			return action.getLocales().localizedForKey("configure_kafka_server");
 		}
 
 		@Override
 		public boolean isValid() {
 
 			if (StringUtils.isEmpty(getAddress())) {
-				setIssueMessage(action.getLocales().localizedForKey("no_connection_address_defined"), IssueMessageType.ERROR);
+				setIssueMessage(action.getLocales().localizedForKey("no_address_defined"), IssueMessageType.ERROR);
 				return false;
 			}
 

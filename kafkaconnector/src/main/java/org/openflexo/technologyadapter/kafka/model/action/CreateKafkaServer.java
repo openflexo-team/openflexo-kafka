@@ -92,7 +92,7 @@ public class CreateKafkaServer extends FlexoAction<CreateKafkaServer, Repository
 
 
 	public static FlexoActionType<CreateKafkaServer, RepositoryFolder, FlexoObject> actionType = new FlexoActionType<CreateKafkaServer, RepositoryFolder, FlexoObject>(
-			"create_jdbc_model", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
+			"create_kafka_model", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
@@ -105,7 +105,6 @@ public class CreateKafkaServer extends FlexoAction<CreateKafkaServer, Repository
 		@Override
 		public boolean isVisibleForSelection(RepositoryFolder object, Vector<FlexoObject> globalSelection) {
 			// TODO check what should be done
-			//return object != null && object.getResourceRepository() instanceof JDBCResourceRepository;
 			return true;
 		}
 

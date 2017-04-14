@@ -38,8 +38,7 @@ import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class KafkaAdapterController extends TechnologyAdapterController<KafkaTechnologyAdapter> {
     
-	private InspectorGroup jdbcInspectorGroup;
-
+	private InspectorGroup kafkaInspectorGroup;
 
 	@Override
 	public Class<KafkaTechnologyAdapter> getTechnologyAdapterClass() {
@@ -53,15 +52,12 @@ public class KafkaAdapterController extends TechnologyAdapterController<KafkaTec
 
     @Override
     protected void initializeInspectors(FlexoController controller) {
-		//jdbcInspectorGroup = controller.loadInspectorGroup("JDBC", getTechnologyAdapter().getLocales(), getFMLTechnologyAdapterInspectorGroup());
-
-		jdbcInspectorGroup = controller.loadInspectorGroup("JDBC", getTechnologyAdapter().getLocales(), getFMLTechnologyAdapterInspectorGroup());
-
+		kafkaInspectorGroup = controller.loadInspectorGroup("Kafka", getTechnologyAdapter().getLocales(), getFMLTechnologyAdapterInspectorGroup());
 	}
 
     @Override
     public InspectorGroup getTechnologyAdapterInspectorGroup() {
-        return jdbcInspectorGroup;
+        return kafkaInspectorGroup;
     }
 
     @Override

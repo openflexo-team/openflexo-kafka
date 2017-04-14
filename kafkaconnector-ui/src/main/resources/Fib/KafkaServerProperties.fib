@@ -6,5 +6,5 @@
   <TextField id="4" columns="7" name="UserTextField" data="data.user" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.8;weightY=0.0)" />
   <Label id="5" name="PasswordLabel" align="right" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.2;weightY=0.0)" label="password" />
   <TextField id="6" passwd="true" columns="7" name="PasswordTextField" data="data.password" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.8;weightY=0.0)" />
-  <FIBVariable id="7" name="data" type="org.openflexo.technologyadapter.kafka.model.JDBCConnection" />
+  <FIBVariable id="7" name="data" type="org.openflexo.technologyadapter.kafka.model.KafkaServer" />
 </Panel>
