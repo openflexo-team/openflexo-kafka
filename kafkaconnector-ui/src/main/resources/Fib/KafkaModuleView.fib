@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel id="0" align="left" borderTop="0" borderLeft="0" trackViewPortHeight="true" trackViewPortWidth="true" borderBottom="0" border="empty" sizeAdjustment="OriginalSize" titleFont="Lucida Grande,0,13" layout="border" borderRight="0" controllerClassName="org.openflexo.technologyadapter.kafka.controller.KafkaModuleViewController" opaque="false">
+  <TabPanel id="3" constraints="border(location=center)" width="100" height="60" name="centerPanel">
+
+  </TabPanel>
+  <FIBVariable id="17" type="org.openflexo.technologyadapter.kafka.model.KafkaServer" name="data" />
+  <LocalizedDictionary id="18">
+  </LocalizedDictionary>
+</Panel>

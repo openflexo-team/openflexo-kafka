@@ -1,0 +1,14 @@
+*.class
+
+# Package Files #
+*.war
+*.ear
+.classpath
+.project
+.settings/
+/.pmd
+
+*.iml
+.gradle
+**/target/
+**/build/

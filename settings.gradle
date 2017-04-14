@@ -1,0 +1,2 @@
+include 'kafkaconnector'
+include 'kafkaconnector-ui'
