@@ -35,6 +35,8 @@
 
 package org.openflexo.technologyadapter.kafka.model;
 
+import java.util.Properties;
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceData;
@@ -69,10 +71,41 @@ public interface KafkaServer extends TechnologyObject<KafkaTechnologyAdapter>, R
 	@Getter(ZOOKEEPER_KEY) @XMLAttribute
 	String getZookeeper();
 
-	@Setter(SERVER_KEY)
+	@Setter(ZOOKEEPER_KEY)
 	void setZookeeper(String zookeeper);
 
+	KafkaProducer<String, String> getProducer();
+
 	abstract class KafkaServerImpl extends FlexoObjectImpl implements KafkaServer {
+
+		KafkaProducer producer = null;
+
+		private Properties getProducerProperties(){
+			Properties properties = new Properties();
+			// TODO correct this
+			//properties.put("bootstrap.servers", getServer());
+			properties.put("bootstrap.servers", "localhost:9092");
+			properties.put("acks", "all");
+			properties.put("retries", 0);
+			properties.put("batch.size", 16384);
+			properties.put("linger.ms", 1);
+			properties.put("buffer.memory", 33554432);
+			properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+			properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+			return properties;
+		}
+
+		@Override
+		public KafkaProducer getProducer() {
+			if (producer == null) {
+				synchronized (this) {
+					if (producer == null) {
+						producer = new KafkaProducer(getProducerProperties());
+					}
+				}
+			}
+			return producer;
+		}
 
 		@Override
 		public KafkaTechnologyAdapter getTechnologyAdapter() {

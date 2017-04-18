@@ -50,7 +50,9 @@ import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.technologyadapter.kafka.ProducerModelSlot.ProducerModelSlotImpl;
+import org.openflexo.technologyadapter.kafka.KafkaProducerModelSlot.KafkaProducerModelSlotImpl;
+import org.openflexo.technologyadapter.kafka.fml.editionaction.CreateKafkaResource;
+import org.openflexo.technologyadapter.kafka.fml.editionaction.SendRecordAction;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
 
@@ -60,10 +62,10 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
  */
 @ModelEntity
 @XMLElement
-@ImplementationClass(ProducerModelSlotImpl.class)
-@DeclareEditionActions({})
+@ImplementationClass(KafkaProducerModelSlotImpl.class)
+@DeclareEditionActions({ CreateKafkaResource.class, SendRecordAction.class })
 @DeclareFlexoBehaviours({})
-public interface ProducerModelSlot extends FreeModelSlot<KafkaServer> {
+public interface KafkaProducerModelSlot extends FreeModelSlot<KafkaServer> {
 
 	@PropertyIdentifier(type = String.class)
 	String SERVER_KEY = "server";
@@ -88,7 +90,7 @@ public interface ProducerModelSlot extends FreeModelSlot<KafkaServer> {
 	@Override
 	KafkaTechnologyAdapter getModelSlotTechnologyAdapter();
 
-	abstract class ProducerModelSlotImpl extends FreeModelSlotImpl<KafkaServer> implements ProducerModelSlot {
+	abstract class KafkaProducerModelSlotImpl extends FreeModelSlotImpl<KafkaServer> implements KafkaProducerModelSlot {
 
 		@Override
 		public Class<KafkaTechnologyAdapter> getTechnologyAdapterClass() {

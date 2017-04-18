@@ -84,7 +84,7 @@ extends
     KafkaTechnologyContextManager getTechnologyContextManager();
 
     @Setter(TECHNOLOGY_CONTEXT_MANAGER)
-    void setTechnologyContextManager(KafkaTechnologyAdapter contextManager);
+    void setTechnologyContextManager(KafkaTechnologyContextManager contextManager);
 
     // TODO connect to model
     @Getter("model")

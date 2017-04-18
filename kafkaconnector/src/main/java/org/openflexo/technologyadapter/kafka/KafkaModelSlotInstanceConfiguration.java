@@ -60,9 +60,9 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.FreeModelSlotInstanceConfiguration;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 
-public class KafkaModelSlotInstanceConfiguration extends FreeModelSlotInstanceConfiguration<KafkaServer, ProducerModelSlot> {
+public class KafkaModelSlotInstanceConfiguration extends FreeModelSlotInstanceConfiguration<KafkaServer, KafkaProducerModelSlot> {
 
-	protected KafkaModelSlotInstanceConfiguration(ProducerModelSlot ms, FlexoConceptInstance fci, FlexoResourceCenter<?> rc) {
+	protected KafkaModelSlotInstanceConfiguration(KafkaProducerModelSlot ms, FlexoConceptInstance fci, FlexoResourceCenter<?> rc) {
 		super(ms, fci, rc);
 	}
 
