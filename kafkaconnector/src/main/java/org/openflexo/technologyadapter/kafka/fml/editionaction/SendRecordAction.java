@@ -91,7 +91,7 @@ import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.technologyadapter.kafka.KafkaProducerModelSlot;
+import org.openflexo.technologyadapter.kafka.KafkaModelSlot;
 import org.openflexo.technologyadapter.kafka.fml.editionaction.SendRecordAction.SendRecordActionImpl;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 
@@ -102,7 +102,7 @@ import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 @XMLElement
 @ImplementationClass(SendRecordActionImpl.class)
 @FML("SendRecord")
-public interface SendRecordAction extends TechnologySpecificAction<KafkaProducerModelSlot, KafkaServer, String> {
+public interface SendRecordAction extends TechnologySpecificAction<KafkaModelSlot, KafkaServer, String> {
 
 	@PropertyIdentifier(type = String.class)
 	String TOPIC_KEY = "topic";
@@ -124,7 +124,7 @@ public interface SendRecordAction extends TechnologySpecificAction<KafkaProducer
 	@Setter(RECORD_KEY)
 	void setRecord(DataBinding<String> record);
 
-	abstract class SendRecordActionImpl extends TechnologySpecificActionImpl<KafkaProducerModelSlot, KafkaServer, String> implements SendRecordAction {
+	abstract class SendRecordActionImpl extends TechnologySpecificActionImpl<KafkaModelSlot, KafkaServer, String> implements SendRecordAction {
 
 		private static final Logger logger = Logger.getLogger(SendRecordAction.class.getPackage().getName());
 
@@ -133,7 +133,7 @@ public interface SendRecordAction extends TechnologySpecificAction<KafkaProducer
 		@Override
 		public String execute(RunTimeEvaluationContext evaluationContext) {
 
-			ModelSlotInstance<KafkaProducerModelSlot, KafkaServer> modelSlotInstance = getModelSlotInstance(evaluationContext);
+			ModelSlotInstance<KafkaModelSlot, KafkaServer> modelSlotInstance = getModelSlotInstance(evaluationContext);
 			if (modelSlotInstance == null) {
 				logger.warning("Could not access model slot instance. Abort.");
 				return null;

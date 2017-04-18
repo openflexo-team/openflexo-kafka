@@ -91,7 +91,7 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.technologyadapter.kafka.KafkaProducerModelSlot;
+import org.openflexo.technologyadapter.kafka.KafkaModelSlot;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
@@ -107,7 +107,7 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResourceFactory;
 @ImplementationClass(CreateKafkaResource.CreateKafkaResourceImpl.class)
 @XMLElement
 @FML("CreateKafkaResource")
-public interface CreateKafkaResource extends AbstractCreateResource<KafkaProducerModelSlot, KafkaServer, KafkaTechnologyAdapter> {
+public interface CreateKafkaResource extends AbstractCreateResource<KafkaModelSlot, KafkaServer, KafkaTechnologyAdapter> {
 
 	String SERVER = "server";
 	String ZOOKEEPER = "zookeeper";
@@ -125,7 +125,7 @@ public interface CreateKafkaResource extends AbstractCreateResource<KafkaProduce
 	void setZookeeper(DataBinding<String> zookeeper);
 
 	abstract class CreateKafkaResourceImpl
-			extends AbstractCreateResourceImpl<KafkaProducerModelSlot, KafkaServer, KafkaTechnologyAdapter> implements CreateKafkaResource {
+			extends AbstractCreateResourceImpl<KafkaModelSlot, KafkaServer, KafkaTechnologyAdapter> implements CreateKafkaResource {
 
 		private static final Logger logger = Logger.getLogger(CreateKafkaResourceImpl.class.getPackage().getName());
 
