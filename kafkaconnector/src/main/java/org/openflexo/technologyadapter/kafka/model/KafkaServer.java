@@ -83,8 +83,7 @@ public interface KafkaServer extends TechnologyObject<KafkaTechnologyAdapter>, R
 		private Properties getProducerProperties(){
 			Properties properties = new Properties();
 			// TODO correct this
-			//properties.put("bootstrap.servers", getServer());
-			properties.put("bootstrap.servers", "localhost:9092");
+			properties.put("bootstrap.servers", getServer());
 			properties.put("acks", "all");
 			properties.put("retries", 0);
 			properties.put("batch.size", 16384);
