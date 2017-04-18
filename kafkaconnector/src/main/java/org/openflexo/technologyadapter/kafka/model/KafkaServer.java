@@ -50,23 +50,29 @@ import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer.KafkaServerImpl;
 
 /**
- * AccessPoint to an HTTP service
+ * Configuration to a Kafka service
  */
 @ModelEntity
 @XMLElement
 @ImplementationClass(KafkaServerImpl.class)
 public interface KafkaServer extends TechnologyObject<KafkaTechnologyAdapter>, ResourceData<KafkaServer> {
 
-	String ADDRESS_KEY = "address";
+	String SERVER_KEY = "server";
+	String ZOOKEEPER_KEY = "zookeeper";
 
-	@Getter(ADDRESS_KEY) @XMLAttribute
-	String getAddress();
+	@Getter(SERVER_KEY) @XMLAttribute
+	String getServer();
 
-	@Setter(ADDRESS_KEY)
-	void setAddress(String url);
+	@Setter(SERVER_KEY)
+	void setServer(String server);
+
+	@Getter(ZOOKEEPER_KEY) @XMLAttribute
+	String getZookeeper();
+
+	@Setter(SERVER_KEY)
+	void setZookeeper(String zookeeper);
 
 	abstract class KafkaServerImpl extends FlexoObjectImpl implements KafkaServer {
-
 
 		@Override
 		public KafkaTechnologyAdapter getTechnologyAdapter() {

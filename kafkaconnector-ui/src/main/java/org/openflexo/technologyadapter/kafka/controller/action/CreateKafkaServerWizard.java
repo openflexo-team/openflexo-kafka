@@ -131,13 +131,13 @@ public class CreateKafkaServerWizard extends FlexoWizard {
 		}
 
 		public String getAddress() {
-			return action.getAddress();
+			return action.getServer();
 		}
 
 		public void setAddress(String newAddress) {
 			if (!newAddress.equals(getAddress())) {
 				String oldValue = getAddress();
-				action.setAddress(newAddress);
+				action.setServer(newAddress);
 				getPropertyChangeSupport().firePropertyChange("address", oldValue, newAddress);
 				checkValidity();
 			}

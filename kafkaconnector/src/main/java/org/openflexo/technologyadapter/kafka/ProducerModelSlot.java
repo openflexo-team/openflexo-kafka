@@ -50,7 +50,7 @@ import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.technologyadapter.kafka.ConsumerModelSlot.ConsumerModelSlotImpl;
+import org.openflexo.technologyadapter.kafka.ProducerModelSlot.ProducerModelSlotImpl;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
 
@@ -60,25 +60,35 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
  */
 @ModelEntity
 @XMLElement
-@ImplementationClass(ConsumerModelSlotImpl.class)
+@ImplementationClass(ProducerModelSlotImpl.class)
 @DeclareEditionActions({})
 @DeclareFlexoBehaviours({})
-public interface ConsumerModelSlot extends FreeModelSlot<KafkaServer> {
+public interface ProducerModelSlot extends FreeModelSlot<KafkaServer> {
 
 	@PropertyIdentifier(type = String.class)
-	String URL_KEY = "url";
+	String SERVER_KEY = "server";
 
-	@Getter(URL_KEY)
+	@PropertyIdentifier(type = String.class)
+	String ZOOKEEPER_KEY = "zookeeper";
+
+	@Getter(SERVER_KEY)
 	@XMLAttribute
-	String getUrl();
+	String getServer();
 
-	@Setter(URL_KEY)
-	void setUrl(String url);
+	@Setter(SERVER_KEY)
+	void setServer(String server);
+
+	@Getter(ZOOKEEPER_KEY)
+	@XMLAttribute
+	String getZookeeper();
+
+	@Setter(ZOOKEEPER_KEY)
+	void setZookeeper(String zookeeper);
 
 	@Override
 	KafkaTechnologyAdapter getModelSlotTechnologyAdapter();
 
-	abstract class ConsumerModelSlotImpl extends FreeModelSlotImpl<KafkaServer> implements ConsumerModelSlot {
+	abstract class ProducerModelSlotImpl extends FreeModelSlotImpl<KafkaServer> implements ProducerModelSlot {
 
 		@Override
 		public Class<KafkaTechnologyAdapter> getTechnologyAdapterClass() {

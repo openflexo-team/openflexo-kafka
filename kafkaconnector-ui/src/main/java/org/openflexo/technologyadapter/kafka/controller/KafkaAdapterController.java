@@ -101,7 +101,7 @@ public class KafkaAdapterController extends TechnologyAdapterController<KafkaTec
 	@Override
 	public String getWindowTitleforObject(TechnologyObject<KafkaTechnologyAdapter> obj, FlexoController controller) {
 		if (obj instanceof KafkaServer) {
-			return "Connection to " +  ((KafkaServer) obj).getAddress();
+			return "Connection to " +  ((KafkaServer) obj).getServer();
 		}
 		return "Connection";
 	}

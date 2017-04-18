@@ -120,7 +120,8 @@ public class CreateKafkaServer extends FlexoAction<CreateKafkaServer, Repository
 	}
 
 	private String resourceName = "test.kafka";
-	private String address = "localhost:9092";
+	private String server = "localhost:9092";
+	private String zookeeper = "localhost:2181";
 
 	public String getResourceName() {
 		return resourceName;
@@ -130,12 +131,20 @@ public class CreateKafkaServer extends FlexoAction<CreateKafkaServer, Repository
 		this.resourceName = resourceName;
 	}
 
-	public String getAddress() {
-		return address;
+	public String getServer() {
+		return server;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public void setServer(String server) {
+		this.server = server;
+	}
+
+	public String getZookeeper() {
+		return zookeeper;
+	}
+
+	public void setZookeeper(String zookeeper) {
+		this.zookeeper = zookeeper;
 	}
 
 	CreateKafkaServer(RepositoryFolder focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
@@ -162,7 +171,8 @@ public class CreateKafkaServer extends FlexoAction<CreateKafkaServer, Repository
 			TechnologyContextManager<KafkaTechnologyAdapter> technologyContextManager = (TechnologyContextManager<KafkaTechnologyAdapter>) technologyAdapter.getTechnologyContextManager();
 			KafkaResource resource = resourceFactory.makeKafkaServerResource(resourceName, getFocusedObject(), technologyContextManager);
 			KafkaServer model = resource.getResourceData(null);
-			model.setAddress(getAddress());
+			model.setServer(getServer());
+			model.setZookeeper(getZookeeper());
 
 		} catch (ModelDefinitionException | FileNotFoundException | ResourceLoadingCancelledException e) {
 			throw new FlexoException(e);
