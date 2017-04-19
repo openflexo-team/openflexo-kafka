@@ -53,6 +53,8 @@ import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.KafkaModelSlot.KafkaModelSlotImpl;
 import org.openflexo.technologyadapter.kafka.fml.editionaction.CreateKafkaResource;
 import org.openflexo.technologyadapter.kafka.fml.editionaction.SendRecordAction;
+import org.openflexo.technologyadapter.kafka.fml.editionaction.StartConsumerAction;
+import org.openflexo.technologyadapter.kafka.fml.editionaction.StopConsumerAction;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
 
@@ -63,7 +65,10 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
 @ModelEntity
 @XMLElement
 @ImplementationClass(KafkaModelSlotImpl.class)
-@DeclareEditionActions({ CreateKafkaResource.class, SendRecordAction.class })
+@DeclareEditionActions({
+		CreateKafkaResource.class, SendRecordAction.class,
+		StartConsumerAction.class, StopConsumerAction.class
+})
 @DeclareFlexoBehaviours({})
 public interface KafkaModelSlot extends FreeModelSlot<KafkaServer> {
 

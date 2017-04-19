@@ -38,7 +38,6 @@ package org.openflexo.technologyadapter.kafka.model;
 import java.util.Properties;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
@@ -50,12 +49,12 @@ import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer.KafkaServerImpl;
+import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
 
 /**
  * Configuration to a Kafka service
  */
-@ModelEntity
-@XMLElement
+@ModelEntity @XMLElement
 @ImplementationClass(KafkaServerImpl.class)
 public interface KafkaServer extends TechnologyObject<KafkaTechnologyAdapter>, ResourceData<KafkaServer> {
 
@@ -76,21 +75,39 @@ public interface KafkaServer extends TechnologyObject<KafkaTechnologyAdapter>, R
 
 	KafkaProducer<String, String> getProducer();
 
+	Properties getConsumerProperties();
+
+	@Override
+	KafkaResource getResource();
+
 	abstract class KafkaServerImpl extends FlexoObjectImpl implements KafkaServer {
 
 		KafkaProducer producer = null;
 
-		private Properties getProducerProperties(){
-			Properties properties = new Properties();
-			// TODO correct this
+		private void fillCommonProperties(Properties properties) {
 			properties.put("bootstrap.servers", getServer());
+			properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+			properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+		}
+
+		public Properties getConsumerProperties() {
+			Properties properties = new Properties();
+			fillCommonProperties(properties);
+			// TODO what to do here ?
+			//properties.put("group.id", "test");
+			properties.put("enable.auto.commit", "true");
+			properties.put("auto.commit.interval.ms", "1000");
+			return properties;
+		}
+
+		public Properties getProducerProperties(){
+			Properties properties = new Properties();
+			fillCommonProperties(properties);
 			properties.put("acks", "all");
 			properties.put("retries", 0);
 			properties.put("batch.size", 16384);
 			properties.put("linger.ms", 1);
 			properties.put("buffer.memory", 33554432);
-			properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-			properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 			return properties;
 		}
 
@@ -108,9 +125,8 @@ public interface KafkaServer extends TechnologyObject<KafkaTechnologyAdapter>, R
 
 		@Override
 		public KafkaTechnologyAdapter getTechnologyAdapter() {
-			FlexoResource<KafkaServer> resource = getResource();
-			if (resource != null && resource.getServiceManager() != null) {
-				FlexoServiceManager serviceManager = resource.getServiceManager();
+			FlexoServiceManager serviceManager = getServiceManager();
+			if (serviceManager != null) {
 				return serviceManager.getService(TechnologyAdapterService.class).getTechnologyAdapter(KafkaTechnologyAdapter.class);
 			}
 			return null;

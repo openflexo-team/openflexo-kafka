@@ -75,6 +75,11 @@ public class KafkaServerFactory<T> extends FGEModelFactoryImpl implements Pamela
 		return newInstance(KafkaServer.class);
 	}
 
+	public KafkaListener makeNewListener() {
+		return newInstance(KafkaListener.class);
+	}
+
+
 	@Override
 	public void startDeserializing() {
 		startIgnoringEdits();
@@ -84,6 +89,7 @@ public class KafkaServerFactory<T> extends FGEModelFactoryImpl implements Pamela
 	public void stopDeserializing() {
 		stopIgnoringEdits();
 	}
+
 
 	public void startIgnoringEdits() {
 		EditingContext editingContext = getResource().getServiceManager().getEditingContext();
