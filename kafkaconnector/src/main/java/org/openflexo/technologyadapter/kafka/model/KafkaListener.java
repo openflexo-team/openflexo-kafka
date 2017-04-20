@@ -77,7 +77,7 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 	@Setter(SERVER)
 	void setServer(KafkaServer server);
 
-	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLElement
+	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLElement(xmlTag = "Topics")
 	List<String> getTopics();
 
 	@Adder(TOPICS)

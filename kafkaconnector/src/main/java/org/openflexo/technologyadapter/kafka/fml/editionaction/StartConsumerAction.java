@@ -71,7 +71,7 @@ public interface StartConsumerAction extends TechnologySpecificAction<KafkaModel
 	@PropertyIdentifier(type = String.class)
 	String TOPICS = "topics";
 
-	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLElement
+	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLElement(xmlTag = "Topics")
 	List<String> getTopics();
 
 	@Adder(TOPICS)

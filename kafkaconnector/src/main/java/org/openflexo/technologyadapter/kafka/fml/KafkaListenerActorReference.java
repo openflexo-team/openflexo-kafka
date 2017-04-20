@@ -65,7 +65,7 @@ public interface KafkaListenerActorReference extends ActorReference<KafkaListene
 	String TOPICS = "topics";
 	String STARTED = "started";
 
-	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLElement
+	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLElement(xmlTag = "Topics")
 	List<String> getTopics();
 
 	@Adder(TOPICS)
