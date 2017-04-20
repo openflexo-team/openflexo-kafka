@@ -43,6 +43,8 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.Import;
+import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
@@ -56,6 +58,7 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
  */
 @ModelEntity @XMLElement
 @ImplementationClass(KafkaServerImpl.class)
+@Imports( { @Import(KafkaListener.class) })
 public interface KafkaServer extends TechnologyObject<KafkaTechnologyAdapter>, ResourceData<KafkaServer> {
 
 	String SERVER_KEY = "server";
@@ -86,17 +89,17 @@ public interface KafkaServer extends TechnologyObject<KafkaTechnologyAdapter>, R
 
 		private void fillCommonProperties(Properties properties) {
 			properties.put("bootstrap.servers", getServer());
-			properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-			properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 		}
 
 		public Properties getConsumerProperties() {
 			Properties properties = new Properties();
 			fillCommonProperties(properties);
 			// TODO what to do here ?
-			//properties.put("group.id", "test");
+			properties.put("group.id", "test");
 			properties.put("enable.auto.commit", "true");
 			properties.put("auto.commit.interval.ms", "1000");
+			properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+			properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 			return properties;
 		}
 
@@ -108,6 +111,8 @@ public interface KafkaServer extends TechnologyObject<KafkaTechnologyAdapter>, R
 			properties.put("batch.size", 16384);
 			properties.put("linger.ms", 1);
 			properties.put("buffer.memory", 33554432);
+			properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+			properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 			return properties;
 		}
 

@@ -77,7 +77,7 @@ public interface StopConsumerAction extends TechnologySpecificAction<KafkaModelS
 			try {
 				KafkaListener listener = receiver.getBindingValue(evaluationContext);
 				if (listener == null) {
-					logger.log(Level.WARNING, "Receiver expression '" + getReceiver() + "'");
+					logger.log(Level.WARNING, "Receiver expression '" + getReceiver() + "' is null");
 					return false;
 				}
 				listener.stop();

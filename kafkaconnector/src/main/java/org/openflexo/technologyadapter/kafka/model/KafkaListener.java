@@ -77,7 +77,7 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 	@Setter(SERVER)
 	void setServer(KafkaServer server);
 
-	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLAttribute
+	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLElement
 	List<String> getTopics();
 
 	@Adder(TOPICS)
@@ -114,7 +114,8 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 
 		private ThreadPoolExecutor executor = new ThreadPoolExecutor(
 				1, 1, 1, TimeUnit.SECONDS, new LinkedBlockingDeque<>()
-		);;
+		);
+
 		private KafkaConsumer consumer;
 
 		@Override
@@ -172,7 +173,7 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 
 		@Override
 		public synchronized void start() {
-			if (getTopics().isEmpty()) {
+			if (!getTopics().isEmpty()) {
 				if (consumer == null) {
 					consumer = new KafkaConsumer(getServer().getConsumerProperties());
 					consumer.subscribe(getTopics());
@@ -196,7 +197,7 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 		}
 
 		private synchronized Iterable<ConsumerRecord<String, String>> poll() {
-			return consumer != null ? consumer.poll(100) : null;
+			return consumer != null ? consumer.poll(20) : null;
 		}
 
 		@Override

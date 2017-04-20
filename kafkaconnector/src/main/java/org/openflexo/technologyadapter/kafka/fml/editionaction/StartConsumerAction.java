@@ -71,7 +71,7 @@ public interface StartConsumerAction extends TechnologySpecificAction<KafkaModel
 	@PropertyIdentifier(type = String.class)
 	String TOPICS = "topics";
 
-	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLElement(xmlTag = TOPICS)
+	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLElement
 	List<String> getTopics();
 
 	@Adder(TOPICS)
@@ -90,7 +90,6 @@ public interface StartConsumerAction extends TechnologySpecificAction<KafkaModel
 
 		@Override
 		public KafkaListener execute(RunTimeEvaluationContext evaluationContext) {
-
 			DataBinding<KafkaServer> receiver = getReceiver();
 			if (receiver == null) {
 				logger.warning("Receiver is null.");
@@ -99,7 +98,12 @@ public interface StartConsumerAction extends TechnologySpecificAction<KafkaModel
 
 			try {
 				KafkaServer kafkaServer = receiver.getBindingValue(evaluationContext);
+				if (kafkaServer == null) {
+					logger.log(Level.WARNING, "Kafka expression '" + getReceiver() + "' is null");
+					return null;
+				}
 				KafkaListener listener = kafkaServer.getResource().getFactory().makeNewListener();
+				listener.setServer(kafkaServer);
 				listener.setTopics(getTopics());
 				listener.start();
 				return listener;

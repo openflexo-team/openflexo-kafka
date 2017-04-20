@@ -2,9 +2,9 @@ package org.openflexo.technologyadapter.kafka.fml;
 
 import java.lang.reflect.Type;
 import org.openflexo.foundation.fml.FlexoRole;
+import org.openflexo.foundation.fml.rt.AbstractVirtualModelInstanceModelFactory;
 import org.openflexo.foundation.fml.rt.ActorReference;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
-import org.openflexo.foundation.fml.rt.VirtualModelInstanceModelFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
@@ -31,7 +31,7 @@ public interface KafkaListenerRole extends FlexoRole<KafkaListener> {
 
         @Override
         public ActorReference<KafkaListener> makeActorReference(KafkaListener object, FlexoConceptInstance fci) {
-            final VirtualModelInstanceModelFactory factory = (VirtualModelInstanceModelFactory) fci.getFactory();
+            AbstractVirtualModelInstanceModelFactory<?> factory = fci.getFactory();
             final KafkaListenerActorReference actor = factory.newInstance(KafkaListenerActorReference.class);
             actor.setTopics(object.getTopics());
             actor.setStarted(object.isStarted());

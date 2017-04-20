@@ -47,7 +47,6 @@ import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
-import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.fml.KafkaListenerActorReference.KafkaListenerActorReferenceImpl;
 import org.openflexo.technologyadapter.kafka.model.KafkaListener;
@@ -66,7 +65,7 @@ public interface KafkaListenerActorReference extends ActorReference<KafkaListene
 	String TOPICS = "topics";
 	String STARTED = "started";
 
-	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLAttribute
+	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLElement
 	List<String> getTopics();
 
 	@Adder(TOPICS)
@@ -78,7 +77,7 @@ public interface KafkaListenerActorReference extends ActorReference<KafkaListene
 	@Setter(TOPICS)
 	void setTopics(List<String> topics);
 
-	@Getter(STARTED)
+	@Getter(value = STARTED, defaultValue = "true")
 	boolean isStarted();
 
 	@Setter(STARTED)
