@@ -92,7 +92,6 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.KafkaModelSlot;
-import org.openflexo.technologyadapter.kafka.fml.editionaction.SendRecordAction.SendRecordActionImpl;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 
 /**
@@ -100,7 +99,7 @@ import org.openflexo.technologyadapter.kafka.model.KafkaServer;
  */
 @ModelEntity
 @XMLElement
-@ImplementationClass(SendRecordActionImpl.class)
+@ImplementationClass(SendRecordAction.SendRecordActionImpl.class)
 @FML("SendRecord")
 public interface SendRecordAction extends TechnologySpecificAction<KafkaModelSlot, KafkaServer, String> {
 

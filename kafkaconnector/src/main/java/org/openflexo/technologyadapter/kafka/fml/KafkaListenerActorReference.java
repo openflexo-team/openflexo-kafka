@@ -33,45 +33,40 @@
  *
  */
 
-package org.openflexo.technologyadapter.kafka.fml.editionaction;
+package org.openflexo.technologyadapter.kafka.fml;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
-import org.openflexo.foundation.fml.editionaction.TechnologySpecificAction;
-import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
+import org.openflexo.foundation.fml.rt.ActorReference;
+import org.openflexo.foundation.fml.rt.ModelSlotInstance;
+import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.technologyadapter.kafka.KafkaModelSlot;
+import org.openflexo.technologyadapter.kafka.fml.KafkaListenerActorReference.KafkaListenerActorReferenceImpl;
 import org.openflexo.technologyadapter.kafka.model.KafkaListener;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
+import org.openflexo.technologyadapter.kafka.model.KafkaServerFactory;
 
 /**
- * Starts a Kafka consumer action
+ * Actor reference for a KafkaListener
  */
 @ModelEntity
 @XMLElement
-@ImplementationClass(StartConsumerAction.StartConsumerActionImpl.class)
-@FML("StartConsumer")
-public interface StartConsumerAction extends TechnologySpecificAction<KafkaModelSlot, KafkaServer, KafkaListener> {
+@ImplementationClass(KafkaListenerActorReferenceImpl.class)
+@FML("KafkaListenerActorReference")
+public interface KafkaListenerActorReference extends ActorReference<KafkaListener> {
 
-	@PropertyIdentifier(type = String.class)
 	String TOPICS = "topics";
+	String STARTED = "started";
 
-	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLElement(xmlTag = TOPICS)
+	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLAttribute
 	List<String> getTopics();
 
 	@Adder(TOPICS)
@@ -83,39 +78,52 @@ public interface StartConsumerAction extends TechnologySpecificAction<KafkaModel
 	@Setter(TOPICS)
 	void setTopics(List<String> topics);
 
-	abstract class StartConsumerActionImpl extends TechnologySpecificActionImpl<KafkaModelSlot, KafkaServer, KafkaListener> implements
-			StartConsumerAction {
+	@Getter(STARTED)
+	boolean isStarted();
 
-		private static final Logger logger = Logger.getLogger(StartConsumerAction.class.getPackage().getName());
+	@Setter(STARTED)
+	void setStarted(boolean started);
 
-		@Override
-		public KafkaListener execute(RunTimeEvaluationContext evaluationContext) {
+	abstract class KafkaListenerActorReferenceImpl extends ActorReferenceImpl<KafkaListener> implements KafkaListenerActorReference {
 
-			DataBinding<KafkaServer> receiver = getReceiver();
-			if (receiver == null) {
-				logger.warning("Receiver is null.");
-				return null;
+		private KafkaListener listener = null;
+
+		private KafkaServer getServer() {
+			ModelSlotInstance<?, ?> modelSlotInstance = getModelSlotInstance();
+			if (modelSlotInstance != null) {
+				ResourceData<?> resourceData = modelSlotInstance.getAccessedResourceData();
+				if (resourceData instanceof KafkaServer) {
+					return (KafkaServer) resourceData;
+				}
 			}
-
-			try {
-				KafkaServer kafkaServer = receiver.getBindingValue(evaluationContext);
-				KafkaListener listener = kafkaServer.getResource().getFactory().makeNewListener();
-				listener.setTopics(getTopics());
-				listener.start();
-				return listener;
-
-			} catch (TypeMismatchException | NullReferenceException | InvocationTargetException e) {
-				logger.log(Level.WARNING, "Can't listen on '" + getTopics() + "'", e);
-				return null;
-			}
-
+			return null;
 		}
 
-
 		@Override
-		public Type getAssignableType() {
-			return KafkaListener.class;
+		public KafkaListener getModellingElement() {
+			if (listener == null) {
+				KafkaServer server = getServer();
+				if (server != null) {
+					KafkaServerFactory factory = server.getResource().getFactory();
+					KafkaListener listener = factory.makeNewListener();
+					listener.setTopics(listener.getTopics());
+					if (isStarted()) {
+						listener.start();
+					}
+					this.listener = listener;
+				}
+			}
+			return listener;
 		}
 
+		@Override
+		public void setModellingElement(KafkaListener object) {
+			if (listener != object) {
+				KafkaListener oldValue = listener;
+				listener = object;
+				getPropertyChangeSupport().firePropertyChange(MODELLING_ELEMENT_KEY, oldValue, object);
+			}
+		}
 	}
+
 }

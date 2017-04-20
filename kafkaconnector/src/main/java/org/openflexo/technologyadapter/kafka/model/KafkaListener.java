@@ -68,8 +68,7 @@ import org.openflexo.toolbox.StringUtils;
 public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>, InnerResourceData<KafkaServer> {
 
 	String SERVER = "server";
-	String TOPIC = "topic";
-
+	String TOPICS = "topics";
 	String FLEXO_CONCEPT_URI = "flexoConceptURI";
 
 	@Getter(SERVER) @XMLAttribute
@@ -78,16 +77,16 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 	@Setter(SERVER)
 	void setServer(KafkaServer server);
 
-	@Getter(value = TOPIC, cardinality = Cardinality.LIST) @XMLAttribute
+	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLAttribute
 	List<String> getTopics();
 
-	@Adder(TOPIC)
+	@Adder(TOPICS)
 	void addTopic(String topic);
 
-	@Remover(TOPIC)
+	@Remover(TOPICS)
 	void removeTopic(String topic);
 
-	@Setter(TOPIC)
+	@Setter(TOPICS)
 	void setTopics(List<String> topics);
 
 	FlexoConcept getFlexoConcept();
@@ -99,6 +98,8 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 
 	@Setter(FLEXO_CONCEPT_URI)
 	void setFlexoConceptURI(String flexoConceptURI);
+
+	boolean isStarted();
 
 	void start();
 
@@ -163,6 +164,10 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 		@Override
 		public void setFlexoConceptURI(String flexoConceptURI) {
 			this.flexoConceptURI = flexoConceptURI;
+		}
+
+		public synchronized boolean isStarted() {
+			return consumer != null;
 		}
 
 		@Override
