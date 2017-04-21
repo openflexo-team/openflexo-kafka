@@ -162,6 +162,7 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 					if (consumer == null) {
 						this.instance = instance;
 						this.actionScheme = actionScheme;
+						// TODO Find a way to get the editor here to allow logging
 						this.action = actionScheme.getActionFactory(instance).makeNewAction(instance, null, null);
 
 						consumer = new KafkaConsumer(getServer().getConsumerProperties());

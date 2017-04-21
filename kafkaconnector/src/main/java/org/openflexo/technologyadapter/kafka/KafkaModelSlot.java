@@ -55,6 +55,7 @@ import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.KafkaModelSlot.KafkaModelSlotImpl;
 import org.openflexo.technologyadapter.kafka.fml.KafkaListenerActorReference;
 import org.openflexo.technologyadapter.kafka.fml.KafkaListenerRole;
+import org.openflexo.technologyadapter.kafka.fml.editionaction.CreateConsumerAction;
 import org.openflexo.technologyadapter.kafka.fml.editionaction.CreateKafkaResource;
 import org.openflexo.technologyadapter.kafka.fml.editionaction.SendRecordAction;
 import org.openflexo.technologyadapter.kafka.fml.editionaction.StartConsumerAction;
@@ -69,7 +70,8 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
 @XMLElement
 @ImplementationClass(KafkaModelSlotImpl.class)
 @DeclareEditionActions({
-	CreateKafkaResource.class, SendRecordAction.class, StartConsumerAction.class, StopConsumerAction.class
+	CreateKafkaResource.class, SendRecordAction.class,
+	CreateConsumerAction.class, StartConsumerAction.class, StopConsumerAction.class
 })
 @DeclareFlexoBehaviours({})
 @DeclareActorReferences({ KafkaListenerActorReference.class })

@@ -37,34 +37,20 @@ package org.openflexo.technologyadapter.kafka.fml.editionaction;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
-import org.openflexo.foundation.fml.ActionScheme;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.editionaction.TechnologySpecificAction;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
-import org.openflexo.model.annotations.Adder;
-import org.openflexo.model.annotations.Embedded;
-import org.openflexo.model.annotations.Finder;
-import org.openflexo.model.annotations.Getter;
-import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.model.annotations.PropertyIdentifier;
-import org.openflexo.model.annotations.Remover;
-import org.openflexo.model.annotations.Setter;
-import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.KafkaModelSlot;
 import org.openflexo.technologyadapter.kafka.model.KafkaListener;
-import org.openflexo.technologyadapter.kafka.model.KafkaServer;
-import org.openflexo.technologyadapter.kafka.model.KafkaTopic;
 
 /**
  * Starts a Kafka consumer action
@@ -73,116 +59,42 @@ import org.openflexo.technologyadapter.kafka.model.KafkaTopic;
 @XMLElement
 @ImplementationClass(StartConsumerAction.StartConsumerActionImpl.class)
 @FML("StartConsumer")
-public interface StartConsumerAction extends TechnologySpecificAction<KafkaModelSlot, KafkaServer, KafkaListener> {
-
-	@PropertyIdentifier(type = String.class)
-	String TOPICS = "topics";
-
-	@PropertyIdentifier(type = String.class)
-	String ACTION_NAME = "actionName";
-
-	@Getter(value = TOPICS, cardinality = Cardinality.LIST)
-	@Embedded
-	@XMLElement
-	List<KafkaTopic> getTopics();
-
-	@Finder(collection = TOPICS)
-	KafkaTopic findTopic(String name);
-
-	@Adder(TOPICS)
-	void addTopic(KafkaTopic topic);
-
-	@Remover(TOPICS)
-	void removeTopic(KafkaTopic topic);
-
-	@Setter(TOPICS)
-	void setTopics(List<KafkaTopic> topics);
-
-	@Getter(ACTION_NAME) @XMLAttribute
-	String getActionName();
-
-	@Setter(ACTION_NAME)
-	void setActionName(String action);
-
-	void addNewTopic();
-
-	ActionScheme getAction();
-
-	void setAction(ActionScheme action);
+public interface StartConsumerAction extends TechnologySpecificAction<KafkaModelSlot, KafkaListener, Boolean> {
 
 	abstract class StartConsumerActionImpl
-		extends TechnologySpecificActionImpl<KafkaModelSlot, KafkaServer, KafkaListener>
+		extends TechnologySpecificActionImpl<KafkaModelSlot, KafkaListener, Boolean>
 		implements StartConsumerAction
 	{
 
 		private static final Logger logger = Logger.getLogger(StartConsumerAction.class.getPackage().getName());
 
-		private ActionScheme action;
-
 		@Override
-		public void addNewTopic() {
-			KafkaTopic kafkaTopic = getFMLModelFactory().newInstance(KafkaTopic.class);
-			kafkaTopic.setName("topic");
-			addTopic(kafkaTopic);
-		}
-
-		public ActionScheme getAction() {
-			String actionName = getActionName();
-			if (action == null && actionName != null) {
-				for (ActionScheme actionScheme : getFlexoConcept().getAccessibleActionSchemes()) {
-					if (Objects.equals(actionName, actionScheme.getName())) {
-						action = actionScheme;
-					}
-				}
-			}
-			return action;
-		}
-
-		@Override
-		public void setAction(ActionScheme action) {
-			ActionScheme oldValue = getAction();
-			if (action != oldValue) {
-				this.action = action;
-				setActionName(action != null ? action.getName() : null);
-				getPropertyChangeSupport().firePropertyChange("action", oldValue, action);
-			}
-		}
-
-		@Override
-		public KafkaListener execute(RunTimeEvaluationContext evaluationContext) {
-			DataBinding<KafkaServer> receiver = getReceiver();
+		public Boolean execute(RunTimeEvaluationContext evaluationContext) {
+			DataBinding<KafkaListener> receiver = getReceiver();
 			if (receiver == null) {
-				logger.warning("Receiver is null.");
-				return null;
+				logger.warning("Receiver expression is null.");
+				return false;
 			}
 
 			try {
-				KafkaServer kafkaServer = receiver.getBindingValue(evaluationContext);
-				if (kafkaServer == null) {
-					logger.log(Level.WARNING, "Kafka expression '" + getReceiver() + "' is null");
-					return null;
+				KafkaListener listener = receiver.getBindingValue(evaluationContext);
+				if (listener == null) {
+					logger.log(Level.WARNING, "Receiver expression '" + getReceiver() + "' is null");
+					return false;
 				}
-
 				FlexoConceptInstance instance = evaluationContext.getFlexoConceptInstance();
-
-				KafkaListener listener = kafkaServer.getResource().getFactory().makeNewListener();
-				listener.setServer(kafkaServer);
-				listener.setTopics(getTopics());
-				listener.setActionName(getActionName());
 				listener.start(instance);
-				return listener;
+				return true;
 
 			} catch (TypeMismatchException | NullReferenceException | InvocationTargetException e) {
-				logger.log(Level.WARNING, "Can't listen on '" + getTopics() + "'", e);
-				return null;
+				logger.log(Level.WARNING, "Can't start consumer '" + getReceiver() + "'", e);
+				return false;
 			}
-
 		}
-
 
 		@Override
 		public Type getAssignableType() {
-			return KafkaListener.class;
+			return Boolean.class;
 		}
 
 	}

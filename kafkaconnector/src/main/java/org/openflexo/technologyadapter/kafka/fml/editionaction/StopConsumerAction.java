@@ -93,7 +93,7 @@ public interface StopConsumerAction extends TechnologySpecificAction<KafkaModelS
 
 		@Override
 		public Type getAssignableType() {
-			return KafkaListener.class;
+			return Boolean.class;
 		}
 
 	}
