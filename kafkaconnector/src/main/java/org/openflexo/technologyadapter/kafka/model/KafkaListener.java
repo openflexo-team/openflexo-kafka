@@ -36,19 +36,26 @@
 package org.openflexo.technologyadapter.kafka.model;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.InnerResourceData;
+import org.openflexo.foundation.fml.ActionScheme;
 import org.openflexo.foundation.fml.FlexoConcept;
+import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
+import org.openflexo.foundation.fml.rt.action.ActionSchemeAction;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Embedded;
+import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -58,7 +65,6 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
-import org.openflexo.toolbox.StringUtils;
 
 /**
  * An instance of this interface links a Kafka Consumer to a FlexoBehavior to execute with it
@@ -69,7 +75,7 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 
 	String SERVER = "server";
 	String TOPICS = "topics";
-	String FLEXO_CONCEPT_URI = "flexoConceptURI";
+	String ACTION_NAME = "actionName";
 
 	@Getter(SERVER) @XMLAttribute
 	KafkaServer getServer();
@@ -77,31 +83,31 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 	@Setter(SERVER)
 	void setServer(KafkaServer server);
 
-	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLElement(xmlTag = "Topics")
-	List<String> getTopics();
+	@Getter(value = TOPICS, cardinality = Cardinality.LIST)
+	@Embedded @XMLElement
+	List<KafkaTopic> getTopics();
+
+	@Finder(collection = TOPICS)
+	KafkaTopic findTopic(String name);
 
 	@Adder(TOPICS)
-	void addTopic(String topic);
+	void addTopic(KafkaTopic topic);
 
 	@Remover(TOPICS)
-	void removeTopic(String topic);
+	void removeTopic(KafkaTopic topic);
 
 	@Setter(TOPICS)
-	void setTopics(List<String> topics);
+	void setTopics(List<KafkaTopic> topics);
 
-	FlexoConcept getFlexoConcept();
+	@Getter(ACTION_NAME) @XMLAttribute
+	String getActionName();
 
-	void setFlexoConcept(FlexoConcept flexoConcept);
-
-	@Getter(value = FLEXO_CONCEPT_URI) @XMLAttribute
-	String getFlexoConceptURI();
-
-	@Setter(FLEXO_CONCEPT_URI)
-	void setFlexoConceptURI(String flexoConceptURI);
+	@Setter(ACTION_NAME)
+	void setActionName(String name);
 
 	boolean isStarted();
 
-	void start();
+	void start(FlexoConceptInstance instance);
 
 	void stop();
 
@@ -109,14 +115,14 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 
 		private static final Logger logger = FlexoLogger.getLogger(KafkaListener.class.getPackage().toString());
 
-		private FlexoConcept flexoConcept;
-		private String flexoConceptURI;
-
 		private ThreadPoolExecutor executor = new ThreadPoolExecutor(
 				1, 1, 1, TimeUnit.SECONDS, new LinkedBlockingDeque<>()
 		);
 
 		private KafkaConsumer consumer;
+		private FlexoConceptInstance instance;
+		private ActionScheme actionScheme;
+		private ActionSchemeAction action;
 
 		@Override
 		public KafkaServer getResourceData() {
@@ -132,55 +138,43 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 			return null;
 		}
 
-		@Override
-		public FlexoConcept getFlexoConcept() {
-			if ( flexoConcept == null && StringUtils.isNotEmpty(flexoConceptURI)) {
-				flexoConcept = getServiceManager().getViewPointLibrary().getFlexoConcept(flexoConceptURI);
-				if (flexoConcept == null) {
-					logger.warning("Could not find FlexoConcept with uri=" + flexoConceptURI);
-				}
-			}
-			return flexoConcept;
-		}
-
-		@Override
-		public void setFlexoConcept(FlexoConcept flexoConcept) {
-			if (this.flexoConcept != flexoConcept) {
-				FlexoConcept oldFlexoConcept = this.flexoConcept;
-				this.flexoConcept = flexoConcept;
-				getPropertyChangeSupport().firePropertyChange("FlexoConcept", oldFlexoConcept, flexoConcept);
-			}
-		}
-
-		// Serialization/deserialization only, do not use
-		@Override
-		public String getFlexoConceptURI() {
-			if (getFlexoConcept() != null) {
-				return getFlexoConcept().getURI();
-			}
-			return flexoConceptURI;
-		}
-
-		// Serialization/deserialization only, do not use
-		@Override
-		public void setFlexoConceptURI(String flexoConceptURI) {
-			this.flexoConceptURI = flexoConceptURI;
-		}
-
 		public synchronized boolean isStarted() {
 			return consumer != null;
 		}
 
+		private ActionScheme getActionScheme(FlexoConceptInstance instance) {
+			FlexoConcept flexoConcept = instance.getFlexoConcept();
+			List<ActionScheme> actionSchemes = flexoConcept.getAccessibleActionSchemes();
+			for (ActionScheme actionScheme : actionSchemes) {
+				if (Objects.equals(getActionName(), actionScheme.getName())) {
+					return actionScheme;
+				}
+			}
+			return null;
+		}
+
 		@Override
-		public synchronized void start() {
-			if (!getTopics().isEmpty()) {
-				if (consumer == null) {
-					consumer = new KafkaConsumer(getServer().getConsumerProperties());
-					consumer.subscribe(getTopics());
-					executor.execute(this::pollRecords);
+		public synchronized void start(FlexoConceptInstance instance) {
+			boolean emptyTopics = getTopics().isEmpty();
+			if (!emptyTopics && instance != null) {
+				ActionScheme actionScheme = getActionScheme(instance);
+				if (actionScheme != null) {
+					if (consumer == null) {
+						this.instance = instance;
+						this.actionScheme = actionScheme;
+						this.action = actionScheme.getActionFactory(instance).makeNewAction(instance, null, null);
+
+						consumer = new KafkaConsumer(getServer().getConsumerProperties());
+						List<String> topicNames = getTopics().stream().map((t) -> t.getName()).collect(Collectors.toList());
+						consumer.subscribe(topicNames);
+						executor.execute(this::pollRecords);
+					}
+				} else {
+					logger.warning("Can't listen with no action scheme");
 				}
 			} else {
-				logger.warning("Can't listen on no topic");
+				if (emptyTopics) { logger.warning("Can't listen with no topic"); }
+				if (instance == null) { logger.warning("Can't listen with no instance"); }
 			}
 		}
 
@@ -191,9 +185,9 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 
 				for (ConsumerRecord<String, String> record : records) {
 					System.out.println("Record " + record.key() + " -> " + record.value());
+					action.doAction();
 				}
 			}
-
 		}
 
 		private synchronized Iterable<ConsumerRecord<String, String>> poll() {
@@ -204,7 +198,10 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 		public synchronized void stop() {
 			if (consumer != null) {
 				consumer.close();
+
 				consumer = null;
+				instance = null;
+				actionScheme = null;
 			}
 		}
 	}

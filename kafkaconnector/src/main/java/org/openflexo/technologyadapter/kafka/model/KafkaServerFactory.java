@@ -79,6 +79,11 @@ public class KafkaServerFactory<T> extends FGEModelFactoryImpl implements Pamela
 		return newInstance(KafkaListener.class);
 	}
 
+	public KafkaTopic makeNewTopic(String name) {
+		KafkaTopic topic = newInstance(KafkaTopic.class);
+		topic.setName(name);
+		return topic;
+	}
 
 	@Override
 	public void startDeserializing() {

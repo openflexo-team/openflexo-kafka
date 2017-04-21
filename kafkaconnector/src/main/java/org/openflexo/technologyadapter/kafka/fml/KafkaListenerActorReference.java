@@ -41,17 +41,22 @@ import org.openflexo.foundation.fml.rt.ActorReference;
 import org.openflexo.foundation.fml.rt.ModelSlotInstance;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Embedded;
+import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.PropertyIdentifier;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.fml.KafkaListenerActorReference.KafkaListenerActorReferenceImpl;
 import org.openflexo.technologyadapter.kafka.model.KafkaListener;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 import org.openflexo.technologyadapter.kafka.model.KafkaServerFactory;
+import org.openflexo.technologyadapter.kafka.model.KafkaTopic;
 
 /**
  * Actor reference for a KafkaListener
@@ -62,20 +67,37 @@ import org.openflexo.technologyadapter.kafka.model.KafkaServerFactory;
 @FML("KafkaListenerActorReference")
 public interface KafkaListenerActorReference extends ActorReference<KafkaListener> {
 
+	@PropertyIdentifier(type = String.class)
 	String TOPICS = "topics";
+
+	@PropertyIdentifier(type = String.class)
 	String STARTED = "started";
 
-	@Getter(value = TOPICS, cardinality = Cardinality.LIST) @XMLElement(xmlTag = "Topics")
-	List<String> getTopics();
+	@PropertyIdentifier(type = String.class)
+	String ACTION_NAME = "actionName";
+
+	@Getter(value = TOPICS, cardinality = Cardinality.LIST)
+	@Embedded
+	@XMLElement
+	List<KafkaTopic> getTopics();
+
+	@Finder(collection = TOPICS)
+	KafkaTopic findTopic(String name);
 
 	@Adder(TOPICS)
-	void addTopic(String topic);
+	void addTopic(KafkaTopic topic);
 
 	@Remover(TOPICS)
-	void removeTopic(String topic);
+	void removeTopic(KafkaTopic topic);
 
 	@Setter(TOPICS)
-	void setTopics(List<String> topics);
+	void setTopics(List<KafkaTopic> topics);
+
+	@Getter(ACTION_NAME) @XMLAttribute
+	String getActionName();
+
+	@Setter(ACTION_NAME)
+	void setActionName(String action);
 
 	@Getter(value = STARTED, defaultValue = "true")
 	boolean isStarted();
@@ -106,9 +128,11 @@ public interface KafkaListenerActorReference extends ActorReference<KafkaListene
 					KafkaServerFactory factory = server.getResource().getFactory();
 					KafkaListener listener = factory.makeNewListener();
 					listener.setTopics(listener.getTopics());
+					/* TODO Search linked flexo concept instance to start listening if needed
 					if (isStarted()) {
 						listener.start();
 					}
+					*/
 					this.listener = listener;
 				}
 			}
