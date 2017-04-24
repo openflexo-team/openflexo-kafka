@@ -44,6 +44,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.InnerResourceData;
 import org.openflexo.foundation.fml.ActionScheme;
@@ -107,7 +108,7 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 
 	boolean isStarted();
 
-	void start(FlexoConceptInstance instance);
+	void start(FlexoConceptInstance instance, FlexoEditor editor);
 
 	void stop();
 
@@ -154,7 +155,7 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 		}
 
 		@Override
-		public synchronized void start(FlexoConceptInstance instance) {
+		public synchronized void start(FlexoConceptInstance instance, FlexoEditor editor) {
 			boolean emptyTopics = getTopics().isEmpty();
 			if (!emptyTopics && instance != null) {
 				ActionScheme actionScheme = getActionScheme(instance);
@@ -163,7 +164,7 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 						this.instance = instance;
 						this.actionScheme = actionScheme;
 						// TODO Find a way to get the editor here to allow logging
-						this.action = actionScheme.getActionFactory(instance).makeNewAction(instance, null, null);
+						this.action = actionScheme.getActionFactory(instance).makeNewAction(instance, null, editor);
 
 						consumer = new KafkaConsumer(getServer().getConsumerProperties());
 						List<String> topicNames = getTopics().stream().map((t) -> t.getName()).collect(Collectors.toList());
