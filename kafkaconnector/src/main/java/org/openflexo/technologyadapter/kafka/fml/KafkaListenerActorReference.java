@@ -127,7 +127,8 @@ public interface KafkaListenerActorReference extends ActorReference<KafkaListene
 				if (server != null) {
 					KafkaServerFactory factory = server.getResource().getFactory();
 					KafkaListener listener = factory.makeNewListener();
-					listener.setTopics(listener.getTopics());
+					listener.setTopics(getTopics());
+					listener.setActionName(getActionName());
 					/* TODO Search linked flexo concept instance to start listening if needed
 					if (isStarted()) {
 						listener.start();
