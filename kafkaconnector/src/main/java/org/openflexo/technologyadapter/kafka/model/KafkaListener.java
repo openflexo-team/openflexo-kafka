@@ -121,8 +121,6 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 		);
 
 		private KafkaConsumer consumer;
-		private FlexoConceptInstance instance;
-		private ActionScheme actionScheme;
 		private ActionSchemeAction action;
 
 		@Override
@@ -161,8 +159,6 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 				ActionScheme actionScheme = getActionScheme(instance);
 				if (actionScheme != null) {
 					if (consumer == null) {
-						this.instance = instance;
-						this.actionScheme = actionScheme;
 						// TODO Find a way to get the editor here to allow logging
 						this.action = actionScheme.getActionFactory(instance).makeNewAction(instance, null, editor);
 
@@ -200,11 +196,15 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 		public synchronized void stop() {
 			if (consumer != null) {
 				consumer.close();
-
 				consumer = null;
-				instance = null;
-				actionScheme = null;
 			}
+		}
+
+
+		@Override
+		public boolean delete(Object... context) {
+			stop();
+			return performSuperDelete(context);
 		}
 	}
 }
