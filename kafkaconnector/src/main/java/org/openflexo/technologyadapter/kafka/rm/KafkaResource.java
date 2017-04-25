@@ -88,10 +88,6 @@ extends
     @Setter(TECHNOLOGY_CONTEXT_MANAGER)
     void setTechnologyContextManager(KafkaTechnologyContextManager contextManager);
 
-    // TODO connect to model
-    @Getter("model")
-	KafkaServer getModel();
-
     abstract class KafkaResourceImpl extends PamelaResourceImpl<KafkaServer, KafkaFactory> implements KafkaResource {
 
         public KafkaTechnologyAdapter getTechnologyAdapter() {
@@ -107,7 +103,7 @@ extends
 
         @Override
         public void unloadResourceData(boolean deleteResourceData) {
-            KafkaServer model = getModel();
+            KafkaServer model = getLoadedResourceData();
             if (model != null) {
                 KafkaProducer<String, String> producer = model.getProducer();
                 if (producer != null) {
