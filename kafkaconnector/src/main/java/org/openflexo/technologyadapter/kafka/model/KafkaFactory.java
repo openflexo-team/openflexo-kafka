@@ -35,7 +35,7 @@
 
 package org.openflexo.technologyadapter.kafka.model;
 
-import org.openflexo.fge.FGEModelFactoryImpl;
+import org.openflexo.foundation.DefaultPamelaResourceModelFactory;
 import org.openflexo.foundation.PamelaResourceModelFactory;
 import org.openflexo.foundation.action.FlexoUndoManager;
 import org.openflexo.foundation.resource.PamelaResourceImpl.IgnoreLoadingEdits;
@@ -48,15 +48,15 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
  * @author charlie
  *
  */
-public class KafkaServerFactory<T> extends FGEModelFactoryImpl implements PamelaResourceModelFactory<KafkaResource> {
+public class KafkaFactory<T> extends DefaultPamelaResourceModelFactory<KafkaResource> implements PamelaResourceModelFactory<KafkaResource> {
 
 	private final KafkaResource resource;
 
 	private FlexoUndoManager undoManager = null;
 	private IgnoreLoadingEdits ignoreHandler = null;
 
-	public KafkaServerFactory(KafkaResource resource, EditingContext editingContext) throws ModelDefinitionException {
-		super(KafkaServer.class);
+	public KafkaFactory(KafkaResource resource, EditingContext editingContext) throws ModelDefinitionException {
+		super(resource, KafkaServer.class);
 		this.resource = resource;
 		setEditingContext(editingContext);
 		addConverter(new RelativePathResourceConverter(null));
@@ -75,8 +75,11 @@ public class KafkaServerFactory<T> extends FGEModelFactoryImpl implements Pamela
 		return newInstance(KafkaServer.class);
 	}
 
-	public KafkaListener makeNewListener() {
-		return newInstance(KafkaListener.class);
+	public KafkaListener makeNewListener(KafkaServer server) {
+		KafkaListener listener = newInstance(KafkaListener.class);
+		listener.setServer(server);
+		server.addListener(listener);
+		return listener;
 	}
 
 	public KafkaTopic makeNewTopic(String name) {

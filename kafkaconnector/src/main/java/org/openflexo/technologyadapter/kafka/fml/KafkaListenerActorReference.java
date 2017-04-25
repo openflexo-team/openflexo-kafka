@@ -53,9 +53,9 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.fml.KafkaListenerActorReference.KafkaListenerActorReferenceImpl;
+import org.openflexo.technologyadapter.kafka.model.KafkaFactory;
 import org.openflexo.technologyadapter.kafka.model.KafkaListener;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
-import org.openflexo.technologyadapter.kafka.model.KafkaServerFactory;
 import org.openflexo.technologyadapter.kafka.model.KafkaTopic;
 
 /**
@@ -125,9 +125,9 @@ public interface KafkaListenerActorReference extends ActorReference<KafkaListene
 			if (listener == null) {
 				KafkaServer server = getServer();
 				if (server != null) {
-					KafkaServerFactory factory = server.getResource().getFactory();
-					KafkaListener listener = factory.makeNewListener();
-					listener.setTopics(getTopics());
+					KafkaFactory factory = server.getResource().getFactory();
+					KafkaListener listener = factory.makeNewListener(server);
+					getTopics().forEach((t) -> listener.addTopic(factory.makeNewTopic(t.getName())));
 					listener.setActionName(getActionName());
 					/* TODO Search linked flexo concept instance to start listening if needed
 					if (isStarted()) {

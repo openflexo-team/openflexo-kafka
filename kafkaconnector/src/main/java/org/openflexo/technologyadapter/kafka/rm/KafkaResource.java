@@ -55,6 +55,7 @@
 
 package org.openflexo.technologyadapter.kafka.rm;
 
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.openflexo.foundation.resource.PamelaResource;
 import org.openflexo.foundation.resource.PamelaResourceImpl;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
@@ -65,8 +66,9 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyContextManager;
+import org.openflexo.technologyadapter.kafka.model.KafkaFactory;
+import org.openflexo.technologyadapter.kafka.model.KafkaListener;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
-import org.openflexo.technologyadapter.kafka.model.KafkaServerFactory;
 import org.openflexo.technologyadapter.kafka.rm.KafkaResource.KafkaResourceImpl;
 
 @ModelEntity
@@ -74,7 +76,7 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResource.KafkaResourceImpl;
 @ImplementationClass(KafkaResourceImpl.class)
 public interface KafkaResource
 extends
-        PamelaResource<KafkaServer, KafkaServerFactory>,
+        PamelaResource<KafkaServer, KafkaFactory>,
         TechnologyAdapterResource<KafkaServer, KafkaTechnologyAdapter>
 {
     
@@ -90,7 +92,7 @@ extends
     @Getter("model")
 	KafkaServer getModel();
 
-    abstract class KafkaResourceImpl extends PamelaResourceImpl<KafkaServer, KafkaServerFactory> implements KafkaResource {
+    abstract class KafkaResourceImpl extends PamelaResourceImpl<KafkaServer, KafkaFactory> implements KafkaResource {
 
         public KafkaTechnologyAdapter getTechnologyAdapter() {
             if (getServiceManager() != null) {
@@ -103,5 +105,19 @@ extends
             return KafkaServer.class;
         }
 
+        @Override
+        public void unloadResourceData(boolean deleteResourceData) {
+            KafkaServer model = getModel();
+            if (model != null) {
+                KafkaProducer<String, String> producer = model.getProducer();
+                if (producer != null) {
+                    producer.close();
+                }
+                for (KafkaListener listener : model.getListeners()) {
+                    listener.stop();
+                }
+            }
+            super.unloadResourceData(deleteResourceData);
+        }
     }
 }

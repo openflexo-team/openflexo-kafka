@@ -35,17 +35,20 @@
 
 package org.openflexo.technologyadapter.kafka.model;
 
+import java.util.List;
 import java.util.Properties;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
+import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.Import;
 import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
@@ -63,6 +66,7 @@ public interface KafkaServer extends TechnologyObject<KafkaTechnologyAdapter>, R
 
 	String SERVER_KEY = "server";
 	String ZOOKEEPER_KEY = "zookeeper";
+	String LISTENERS_KEY = "listener";
 
 	@Getter(SERVER_KEY) @XMLAttribute
 	String getServer();
@@ -77,6 +81,15 @@ public interface KafkaServer extends TechnologyObject<KafkaTechnologyAdapter>, R
 	void setZookeeper(String zookeeper);
 
 	KafkaProducer<String, String> getProducer();
+
+	@Getter(value = LISTENERS_KEY, cardinality = Getter.Cardinality.LIST)
+	List<KafkaListener> getListeners();
+
+	@Adder(LISTENERS_KEY)
+	void addListener(KafkaListener listener);
+
+	@Remover(LISTENERS_KEY)
+	void removeListener(KafkaListener listener);
 
 	Properties getConsumerProperties();
 

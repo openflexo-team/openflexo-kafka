@@ -162,7 +162,7 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 						// TODO Find a way to get the editor here to allow logging
 						this.action = actionScheme.getActionFactory(instance).makeNewAction(instance, null, editor);
 
-						consumer = new KafkaConsumer(getServer().getConsumerProperties());
+ 						consumer = new KafkaConsumer(getServer().getConsumerProperties());
 						List<String> topicNames = getTopics().stream().map((t) -> t.getName()).collect(Collectors.toList());
 						consumer.subscribe(topicNames);
 						executor.execute(this::pollRecords);

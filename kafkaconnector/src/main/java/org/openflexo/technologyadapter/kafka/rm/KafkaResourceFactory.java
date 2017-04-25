@@ -43,15 +43,15 @@ import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
+import org.openflexo.technologyadapter.kafka.model.KafkaFactory;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
-import org.openflexo.technologyadapter.kafka.model.KafkaServerFactory;
 import org.openflexo.toolbox.StringUtils;
 
 /**
  *
  */
 public class KafkaResourceFactory
-    extends PamelaResourceFactory<KafkaResource, KafkaServer, KafkaTechnologyAdapter, KafkaServerFactory>
+    extends PamelaResourceFactory<KafkaResource, KafkaServer, KafkaTechnologyAdapter, KafkaFactory>
 {
 
     public static final String KAFKA_EXTENSION = ".kafka";
@@ -61,9 +61,9 @@ public class KafkaResourceFactory
     }
 
     @Override
-    public KafkaServerFactory<?> makeResourceDataFactory(KafkaResource resource, TechnologyContextManager<KafkaTechnologyAdapter> technologyContextManager) throws ModelDefinitionException {
+    public KafkaFactory<?> makeResourceDataFactory(KafkaResource resource, TechnologyContextManager<KafkaTechnologyAdapter> technologyContextManager) throws ModelDefinitionException {
         FlexoEditingContext editingContext = technologyContextManager.getServiceManager().getEditingContext();
-        return new KafkaServerFactory(resource, editingContext);
+        return new KafkaFactory(resource, editingContext);
     }
 
     @Override

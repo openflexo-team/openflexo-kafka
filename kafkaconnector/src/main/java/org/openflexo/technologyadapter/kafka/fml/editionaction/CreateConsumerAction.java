@@ -163,7 +163,7 @@ public interface CreateConsumerAction extends TechnologySpecificAction<KafkaMode
 					return null;
 				}
 
-				KafkaListener listener = kafkaServer.getResource().getFactory().makeNewListener();
+				KafkaListener listener = kafkaServer.getResource().getFactory().makeNewListener(kafkaServer);
 				listener.setServer(kafkaServer);
 				listener.setTopics(getTopics());
 				listener.setActionName(getActionName());
