@@ -36,13 +36,14 @@
 package org.openflexo.technologyadapter.kafka;
 
 import java.lang.reflect.Type;
+
 import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.annotations.DeclareActorReferences;
 import org.openflexo.foundation.fml.annotations.DeclareEditionActions;
 import org.openflexo.foundation.fml.annotations.DeclareFlexoBehaviours;
 import org.openflexo.foundation.fml.annotations.DeclareFlexoRoles;
+import org.openflexo.foundation.fml.rt.AbstractVirtualModelInstance;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
-import org.openflexo.foundation.fml.rt.View;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.FreeModelSlot;
 import org.openflexo.model.annotations.Getter;
@@ -69,10 +70,8 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
 @ModelEntity
 @XMLElement
 @ImplementationClass(KafkaModelSlotImpl.class)
-@DeclareEditionActions({
-	CreateKafkaResource.class, SendRecordAction.class,
-	CreateConsumerAction.class, StartConsumerAction.class, StopConsumerAction.class
-})
+@DeclareEditionActions({ CreateKafkaResource.class, SendRecordAction.class, CreateConsumerAction.class, StartConsumerAction.class,
+		StopConsumerAction.class })
 @DeclareFlexoBehaviours({})
 @DeclareActorReferences({ KafkaListenerActorReference.class })
 @DeclareFlexoRoles({ KafkaListenerRole.class })
@@ -129,7 +128,7 @@ public interface KafkaModelSlot extends FreeModelSlot<KafkaServer> {
 		}
 
 		@Override
-		public KafkaResource createProjectSpecificEmptyResource(View view, String filename, String modelUri) {
+		public KafkaResource createProjectSpecificEmptyResource(AbstractVirtualModelInstance<?, ?> view, String filename, String modelUri) {
 			// TODO create empty resource
 			return null;
 		}

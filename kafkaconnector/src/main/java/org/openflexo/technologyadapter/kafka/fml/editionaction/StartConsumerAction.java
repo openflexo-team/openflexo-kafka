@@ -39,6 +39,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
@@ -63,10 +64,8 @@ import org.openflexo.technologyadapter.kafka.model.KafkaListener;
 @FML("StartConsumer")
 public interface StartConsumerAction extends TechnologySpecificAction<KafkaModelSlot, KafkaListener, Boolean> {
 
-	abstract class StartConsumerActionImpl
-		extends TechnologySpecificActionImpl<KafkaModelSlot, KafkaListener, Boolean>
-		implements StartConsumerAction
-	{
+	abstract class StartConsumerActionImpl extends TechnologySpecificActionImpl<KafkaModelSlot, KafkaListener, Boolean>
+			implements StartConsumerAction {
 
 		private static final Logger logger = Logger.getLogger(StartConsumerAction.class.getPackage().getName());
 
@@ -87,8 +86,8 @@ public interface StartConsumerAction extends TechnologySpecificAction<KafkaModel
 
 				FlexoConceptInstance instance = evaluationContext.getFlexoConceptInstance();
 				FlexoEditor editor = null;
-				if (instance.getView().getResourceCenter() instanceof FlexoProject) {
-					FlexoProject project = (FlexoProject) instance.getView().getResourceCenter();
+				if (instance.getVirtualModelInstance().getResourceCenter() instanceof FlexoProject) {
+					FlexoProject project = (FlexoProject) instance.getVirtualModelInstance().getResourceCenter();
 					editor = getServiceManager().getProjectLoaderService().getEditorForProject(project);
 				}
 				listener.start(instance, editor);

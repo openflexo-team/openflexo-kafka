@@ -60,6 +60,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.FreeModelSlotInstanceConfiguration;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 
+@Deprecated
 public class KafkaModelSlotInstanceConfiguration extends FreeModelSlotInstanceConfiguration<KafkaServer, KafkaModelSlot> {
 
 	protected KafkaModelSlotInstanceConfiguration(KafkaModelSlot ms, FlexoConceptInstance fci, FlexoResourceCenter<?> rc) {
