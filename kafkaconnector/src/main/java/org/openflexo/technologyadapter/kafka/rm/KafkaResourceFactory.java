@@ -50,39 +50,44 @@ import org.openflexo.toolbox.StringUtils;
 /**
  *
  */
-public class KafkaResourceFactory
-    extends PamelaResourceFactory<KafkaResource, KafkaServer, KafkaTechnologyAdapter, KafkaFactory>
-{
+public class KafkaResourceFactory extends PamelaResourceFactory<KafkaResource, KafkaServer, KafkaTechnologyAdapter, KafkaFactory> {
 
-    public static final String KAFKA_EXTENSION = ".kafka";
+	public static final String KAFKA_EXTENSION = ".kafka";
 
-    public KafkaResourceFactory() throws ModelDefinitionException {
-        super(KafkaResource.class);
-    }
+	public KafkaResourceFactory() throws ModelDefinitionException {
+		super(KafkaResource.class);
+	}
 
-    @Override
-    public KafkaFactory<?> makeResourceDataFactory(KafkaResource resource, TechnologyContextManager<KafkaTechnologyAdapter> technologyContextManager) throws ModelDefinitionException {
-        FlexoEditingContext editingContext = technologyContextManager.getServiceManager().getEditingContext();
-        return new KafkaFactory(resource, editingContext);
-    }
+	@Override
+	public KafkaFactory<?> makeResourceDataFactory(KafkaResource resource,
+			TechnologyContextManager<KafkaTechnologyAdapter> technologyContextManager) throws ModelDefinitionException {
+		FlexoEditingContext editingContext = technologyContextManager.getServiceManager().getEditingContext();
+		return new KafkaFactory(resource, editingContext);
+	}
 
-    @Override
-    public KafkaServer makeEmptyResourceData(KafkaResource resource) {
+	@Override
+	public KafkaServer makeEmptyResourceData(KafkaResource resource) {
 		return resource.getFactory().makeEmptyModel();
 	}
 
-    @Override
-    public <I> boolean isValidArtefact(I serializationArtefact, FlexoResourceCenter<I> resourceCenter) {
-        String name = resourceCenter.retrieveName(serializationArtefact);
-        return StringUtils.hasExtension(name, KAFKA_EXTENSION);
-    }
+	@Override
+	public <I> boolean isValidArtefact(I serializationArtefact, FlexoResourceCenter<I> resourceCenter) {
+		String name = resourceCenter.retrieveName(serializationArtefact);
+		return StringUtils.hasExtension(name, KAFKA_EXTENSION);
+	}
 
-    public <I> KafkaResource makeKafkaServerResource(String baseName, RepositoryFolder<KafkaResource, I> folder, TechnologyContextManager<KafkaTechnologyAdapter> technologyContextManager)
-        throws SaveResourceException, ModelDefinitionException {
+	@Override
+	public <I> I getConvertableArtefact(I serializationArtefact, FlexoResourceCenter<I> resourceCenter) {
+		return null;
+	}
 
-        FlexoResourceCenter<I> rc = folder.getResourceRepository().getResourceCenter();
-        String artefactName = baseName.endsWith(KAFKA_EXTENSION) ? baseName : baseName + KAFKA_EXTENSION;
-        I serializationArtefact = rc.createEntry(artefactName, folder.getSerializationArtefact());
-        return makeResource(serializationArtefact, rc, technologyContextManager, true);
-    }
+	public <I> KafkaResource makeKafkaServerResource(String baseName, RepositoryFolder<KafkaResource, I> folder,
+			TechnologyContextManager<KafkaTechnologyAdapter> technologyContextManager)
+			throws SaveResourceException, ModelDefinitionException {
+
+		FlexoResourceCenter<I> rc = folder.getResourceRepository().getResourceCenter();
+		String artefactName = baseName.endsWith(KAFKA_EXTENSION) ? baseName : baseName + KAFKA_EXTENSION;
+		I serializationArtefact = rc.createEntry(artefactName, folder.getSerializationArtefact());
+		return makeResource(serializationArtefact, rc, technologyContextManager, true);
+	}
 }
