@@ -77,7 +77,7 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
-import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.action.FlexoActionFactory;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
@@ -91,8 +91,8 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResourceFactory;
 public class CreateKafkaServer extends FlexoAction<CreateKafkaServer, RepositoryFolder, FlexoObject> {
 
 
-	public static FlexoActionType<CreateKafkaServer, RepositoryFolder, FlexoObject> actionType = new FlexoActionType<CreateKafkaServer, RepositoryFolder, FlexoObject>(
-			"create_kafka_model", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
+	public static FlexoActionFactory<CreateKafkaServer, RepositoryFolder, FlexoObject> actionType = new FlexoActionFactory<CreateKafkaServer, RepositoryFolder, FlexoObject>(
+			"create_kafka_model", FlexoActionFactory.newMenu, FlexoActionFactory.defaultGroup, FlexoActionFactory.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
