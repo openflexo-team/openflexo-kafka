@@ -42,6 +42,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.openflexo.foundation.FlexoEditor;
@@ -50,6 +51,7 @@ import org.openflexo.foundation.InnerResourceData;
 import org.openflexo.foundation.fml.ActionScheme;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
+import org.openflexo.foundation.fml.rt.action.AbstractActionSchemeActionFactory;
 import org.openflexo.foundation.fml.rt.action.ActionSchemeAction;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
@@ -70,7 +72,8 @@ import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
 /**
  * An instance of this interface links a Kafka Consumer to a FlexoBehavior to execute with it
  */
-@ModelEntity @XMLElement
+@ModelEntity
+@XMLElement
 @ImplementationClass(KafkaListener.KafkaListenerImpl.class)
 public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>, InnerResourceData<KafkaServer> {
 
@@ -78,14 +81,16 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 	String TOPICS = "topics";
 	String ACTION_NAME = "actionName";
 
-	@Getter(SERVER) @XMLAttribute
+	@Getter(SERVER)
+	@XMLAttribute
 	KafkaServer getServer();
 
 	@Setter(SERVER)
 	void setServer(KafkaServer server);
 
 	@Getter(value = TOPICS, cardinality = Cardinality.LIST)
-	@Embedded @XMLElement
+	@Embedded
+	@XMLElement
 	List<KafkaTopic> getTopics();
 
 	@Finder(collection = TOPICS)
@@ -100,7 +105,8 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 	@Setter(TOPICS)
 	void setTopics(List<KafkaTopic> topics);
 
-	@Getter(ACTION_NAME) @XMLAttribute
+	@Getter(ACTION_NAME)
+	@XMLAttribute
 	String getActionName();
 
 	@Setter(ACTION_NAME)
@@ -116,9 +122,7 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 
 		private static final Logger logger = FlexoLogger.getLogger(KafkaListener.class.getPackage().toString());
 
-		private ThreadPoolExecutor executor = new ThreadPoolExecutor(
-				1, 1, 1, TimeUnit.SECONDS, new LinkedBlockingDeque<>()
-		);
+		private ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 1, TimeUnit.SECONDS, new LinkedBlockingDeque<>());
 
 		private KafkaConsumer consumer;
 		private ActionSchemeAction action;
@@ -137,6 +141,7 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 			return null;
 		}
 
+		@Override
 		public synchronized boolean isStarted() {
 			return consumer != null;
 		}
@@ -160,26 +165,33 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 				if (actionScheme != null) {
 					if (consumer == null) {
 						// TODO Find a way to get the editor here to allow logging
-						this.action = actionScheme.getActionFactory(instance).makeNewAction(instance, null, editor);
-
- 						consumer = new KafkaConsumer(getServer().getConsumerProperties());
+						this.action = (ActionSchemeAction) ((AbstractActionSchemeActionFactory) actionScheme.getActionFactory(instance))
+								.makeNewAction(instance, null, editor);
+						consumer = new KafkaConsumer(getServer().getConsumerProperties());
 						List<String> topicNames = getTopics().stream().map((t) -> t.getName()).collect(Collectors.toList());
 						consumer.subscribe(topicNames);
 						executor.execute(this::pollRecords);
 					}
-				} else {
+				}
+				else {
 					logger.warning("Can't listen with no action scheme");
 				}
-			} else {
-				if (emptyTopics) { logger.warning("Can't listen with no topic"); }
-				if (instance == null) { logger.warning("Can't listen with no instance"); }
+			}
+			else {
+				if (emptyTopics) {
+					logger.warning("Can't listen with no topic");
+				}
+				if (instance == null) {
+					logger.warning("Can't listen with no instance");
+				}
 			}
 		}
 
 		private void pollRecords() {
-			while (consumer != null ) {
+			while (consumer != null) {
 				Iterable<ConsumerRecord<String, String>> records = poll();
-				if (records == null) return;
+				if (records == null)
+					return;
 
 				for (ConsumerRecord<String, String> record : records) {
 					System.out.println("Record " + record.key() + " -> " + record.value());
@@ -199,7 +211,6 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 				consumer = null;
 			}
 		}
-
 
 		@Override
 		public boolean delete(Object... context) {
