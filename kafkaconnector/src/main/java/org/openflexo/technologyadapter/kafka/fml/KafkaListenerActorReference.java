@@ -36,6 +36,7 @@
 package org.openflexo.technologyadapter.kafka.fml;
 
 import java.util.List;
+
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.rt.ActorReference;
 import org.openflexo.foundation.fml.rt.ModelSlotInstance;
@@ -93,7 +94,8 @@ public interface KafkaListenerActorReference extends ActorReference<KafkaListene
 	@Setter(TOPICS)
 	void setTopics(List<KafkaTopic> topics);
 
-	@Getter(ACTION_NAME) @XMLAttribute
+	@Getter(ACTION_NAME)
+	@XMLAttribute
 	String getActionName();
 
 	@Setter(ACTION_NAME)
@@ -121,7 +123,7 @@ public interface KafkaListenerActorReference extends ActorReference<KafkaListene
 		}
 
 		@Override
-		public KafkaListener getModellingElement() {
+		public KafkaListener getModellingElement(boolean forceLoading) {
 			if (listener == null) {
 				KafkaServer server = getServer();
 				if (server != null) {
