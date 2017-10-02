@@ -42,9 +42,6 @@ import org.openflexo.foundation.fml.annotations.DeclareActorReferences;
 import org.openflexo.foundation.fml.annotations.DeclareEditionActions;
 import org.openflexo.foundation.fml.annotations.DeclareFlexoBehaviours;
 import org.openflexo.foundation.fml.annotations.DeclareFlexoRoles;
-import org.openflexo.foundation.fml.rt.VirtualModelInstance;
-import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.FreeModelSlot;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -62,7 +59,6 @@ import org.openflexo.technologyadapter.kafka.fml.editionaction.SendRecordAction;
 import org.openflexo.technologyadapter.kafka.fml.editionaction.StartConsumerAction;
 import org.openflexo.technologyadapter.kafka.fml.editionaction.StopConsumerAction;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
-import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
 
 /**
  * Kafka consumer model slot.
@@ -122,22 +118,5 @@ public interface KafkaModelSlot extends FreeModelSlot<KafkaServer> {
 			return (KafkaTechnologyAdapter) super.getModelSlotTechnologyAdapter();
 		}
 
-		@Override
-		public KafkaModelSlotInstanceConfiguration createConfiguration(FlexoConceptInstance fci, FlexoResourceCenter<?> rc) {
-			return new KafkaModelSlotInstanceConfiguration(this, fci, rc);
-		}
-
-		@Override
-		public KafkaResource createProjectSpecificEmptyResource(VirtualModelInstance<?, ?> view, String filename, String modelUri) {
-			// TODO create empty resource
-			return null;
-		}
-
-		@Override
-		public KafkaResource createSharedEmptyResource(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
-				String modelUri) {
-			// TODO create empty resource
-			return null;
-		}
 	}
 }
