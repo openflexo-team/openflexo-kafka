@@ -72,6 +72,7 @@ package org.openflexo.technologyadapter.kafka.model.action;
 
 import java.io.FileNotFoundException;
 import java.util.Vector;
+
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
@@ -89,7 +90,6 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
 import org.openflexo.technologyadapter.kafka.rm.KafkaResourceFactory;
 
 public class CreateKafkaServer extends FlexoAction<CreateKafkaServer, RepositoryFolder, FlexoObject> {
-
 
 	public static FlexoActionFactory<CreateKafkaServer, RepositoryFolder, FlexoObject> actionType = new FlexoActionFactory<CreateKafkaServer, RepositoryFolder, FlexoObject>(
 			"create_kafka_model", FlexoActionFactory.newMenu, FlexoActionFactory.defaultGroup, FlexoActionFactory.ADD_ACTION_TYPE) {
@@ -168,8 +168,9 @@ public class CreateKafkaServer extends FlexoAction<CreateKafkaServer, Repository
 		try {
 			KafkaTechnologyAdapter technologyAdapter = getTechnologyAdapter();
 			KafkaResourceFactory resourceFactory = technologyAdapter.getResourceFactory(KafkaResourceFactory.class);
-			TechnologyContextManager<KafkaTechnologyAdapter> technologyContextManager = (TechnologyContextManager<KafkaTechnologyAdapter>) technologyAdapter.getTechnologyContextManager();
-			KafkaResource resource = resourceFactory.makeKafkaServerResource(resourceName, getFocusedObject(), technologyContextManager);
+			TechnologyContextManager<KafkaTechnologyAdapter> technologyContextManager = (TechnologyContextManager<KafkaTechnologyAdapter>) technologyAdapter
+					.getTechnologyContextManager();
+			KafkaResource resource = resourceFactory.makeKafkaServerResource(resourceName, getFocusedObject());
 			KafkaServer model = resource.getResourceData(null);
 			model.setServer(getServer());
 			model.setZookeeper(getZookeeper());
