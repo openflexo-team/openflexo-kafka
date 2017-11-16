@@ -55,15 +55,34 @@
 
 package org.openflexo.technologyadapter.kafka.rm;
 
+import java.io.IOException;
+
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResourceRepository;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 
-public class KafkaResourceRepository<I> extends
-        TechnologyAdapterResourceRepository<KafkaResource, KafkaTechnologyAdapter, KafkaServer, I>
-{
-    public KafkaResourceRepository(KafkaTechnologyAdapter adapter, FlexoResourceCenter<I> resourceCenter) {
-        super(adapter, resourceCenter);
-    }
+@ModelEntity
+public interface KafkaResourceRepository<I>
+		extends TechnologyAdapterResourceRepository<KafkaResource, KafkaTechnologyAdapter, KafkaServer, I> {
+
+	public static <I> KafkaResourceRepository<I> instanciateNewRepository(KafkaTechnologyAdapter technologyAdapter,
+			FlexoResourceCenter<I> resourceCenter) throws IOException {
+		ModelFactory factory;
+		try {
+			factory = new ModelFactory(KafkaResourceRepository.class);
+			KafkaResourceRepository<I> newRepository = factory.newInstance(KafkaResourceRepository.class);
+			newRepository.setTechnologyAdapter(technologyAdapter);
+			newRepository.setResourceCenter(resourceCenter);
+			newRepository.setBaseArtefact(resourceCenter.getBaseArtefact());
+			newRepository.getRootFolder().setRepositoryContext(null);
+			return newRepository;
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

@@ -74,6 +74,7 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
+
 import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
@@ -112,20 +113,22 @@ public interface CreateKafkaResource extends AbstractCreateResource<KafkaModelSl
 	String SERVER = "server";
 	String ZOOKEEPER = "zookeeper";
 
-	@Getter(SERVER) @XMLAttribute
+	@Getter(SERVER)
+	@XMLAttribute
 	DataBinding<String> getServer();
 
 	@Setter(SERVER)
 	void setServer(DataBinding<String> zookeeper);
 
-	@Getter(ZOOKEEPER) @XMLAttribute
+	@Getter(ZOOKEEPER)
+	@XMLAttribute
 	DataBinding<String> getZookeeper();
 
 	@Setter(ZOOKEEPER)
 	void setZookeeper(DataBinding<String> zookeeper);
 
-	abstract class CreateKafkaResourceImpl
-			extends AbstractCreateResourceImpl<KafkaModelSlot, KafkaServer, KafkaTechnologyAdapter> implements CreateKafkaResource {
+	abstract class CreateKafkaResourceImpl extends AbstractCreateResourceImpl<KafkaModelSlot, KafkaServer, KafkaTechnologyAdapter>
+			implements CreateKafkaResource {
 
 		private static final Logger logger = Logger.getLogger(CreateKafkaResourceImpl.class.getPackage().getName());
 
@@ -183,18 +186,18 @@ public interface CreateKafkaResource extends AbstractCreateResource<KafkaModelSl
 				String resourceName = getResourceName(evaluationContext);
 				String resourceURI = getResourceURI(evaluationContext);
 				FlexoResourceCenter<?> rc = getResourceCenter(evaluationContext);
-				KafkaTechnologyAdapter technologyAdapter = getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(KafkaTechnologyAdapter.class);
+				KafkaTechnologyAdapter technologyAdapter = getServiceManager().getTechnologyAdapterService()
+						.getTechnologyAdapter(KafkaTechnologyAdapter.class);
 
-				KafkaResource newResource = createResource(technologyAdapter, KafkaResourceFactory.class, rc, resourceName, resourceURI, getRelativePath(), ".kafka", true);
+				KafkaResource newResource = createResource(technologyAdapter, KafkaResourceFactory.class, rc, resourceName, resourceURI,
+						getRelativePath(), ".kafka", true);
 				KafkaServer server = newResource.getResourceData(null);
 				server.setServer(getServer().getBindingValue(evaluationContext));
 				server.setZookeeper(getZookeeper().getBindingValue(evaluationContext));
 
 				return server;
-			} catch (
-				ModelDefinitionException |FileNotFoundException | ResourceLoadingCancelledException |
-					TypeMismatchException | InvocationTargetException | NullReferenceException e)
-			{
+			} catch (ModelDefinitionException | FileNotFoundException | ResourceLoadingCancelledException | TypeMismatchException
+					| InvocationTargetException | NullReferenceException e) {
 				throw new FlexoException(e);
 			}
 

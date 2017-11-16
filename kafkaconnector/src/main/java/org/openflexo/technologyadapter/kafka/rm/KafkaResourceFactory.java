@@ -37,9 +37,9 @@ package org.openflexo.technologyadapter.kafka.rm;
 
 import org.openflexo.foundation.FlexoEditingContext;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.resource.PamelaResourceFactory;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.SaveResourceException;
+import org.openflexo.foundation.resource.TechnologySpecificPamelaResourceFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
@@ -50,7 +50,8 @@ import org.openflexo.toolbox.StringUtils;
 /**
  *
  */
-public class KafkaResourceFactory extends PamelaResourceFactory<KafkaResource, KafkaServer, KafkaTechnologyAdapter, KafkaFactory> {
+public class KafkaResourceFactory
+		extends TechnologySpecificPamelaResourceFactory<KafkaResource, KafkaServer, KafkaTechnologyAdapter, KafkaFactory> {
 
 	public static final String KAFKA_EXTENSION = ".kafka";
 
@@ -81,13 +82,12 @@ public class KafkaResourceFactory extends PamelaResourceFactory<KafkaResource, K
 		return null;
 	}
 
-	public <I> KafkaResource makeKafkaServerResource(String baseName, RepositoryFolder<KafkaResource, I> folder,
-			TechnologyContextManager<KafkaTechnologyAdapter> technologyContextManager)
+	public <I> KafkaResource makeKafkaServerResource(String baseName, RepositoryFolder<KafkaResource, I> folder)
 			throws SaveResourceException, ModelDefinitionException {
 
 		FlexoResourceCenter<I> rc = folder.getResourceRepository().getResourceCenter();
 		String artefactName = baseName.endsWith(KAFKA_EXTENSION) ? baseName : baseName + KAFKA_EXTENSION;
 		I serializationArtefact = rc.createEntry(artefactName, folder.getSerializationArtefact());
-		return makeResource(serializationArtefact, rc, technologyContextManager, true);
+		return makeResource(serializationArtefact, rc, true);
 	}
 }
