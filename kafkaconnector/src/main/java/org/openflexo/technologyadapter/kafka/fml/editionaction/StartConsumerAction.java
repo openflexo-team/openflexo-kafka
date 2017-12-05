@@ -46,7 +46,7 @@ import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.fml.annotations.FML;
-import org.openflexo.foundation.fml.editionaction.TechnologySpecificAction;
+import org.openflexo.foundation.fml.editionaction.TechnologySpecificActionDefiningReceiver;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -62,9 +62,9 @@ import org.openflexo.technologyadapter.kafka.model.KafkaListener;
 @XMLElement
 @ImplementationClass(StartConsumerAction.StartConsumerActionImpl.class)
 @FML("StartConsumer")
-public interface StartConsumerAction extends TechnologySpecificAction<KafkaModelSlot, KafkaListener, Boolean> {
+public interface StartConsumerAction extends TechnologySpecificActionDefiningReceiver<KafkaModelSlot, KafkaListener, Boolean> {
 
-	abstract class StartConsumerActionImpl extends TechnologySpecificActionImpl<KafkaModelSlot, KafkaListener, Boolean>
+	abstract class StartConsumerActionImpl extends TechnologySpecificActionDefiningReceiverImpl<KafkaModelSlot, KafkaListener, Boolean>
 			implements StartConsumerAction {
 
 		private static final Logger logger = Logger.getLogger(StartConsumerAction.class.getPackage().getName());

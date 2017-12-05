@@ -41,12 +41,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.ActionScheme;
 import org.openflexo.foundation.fml.annotations.FML;
-import org.openflexo.foundation.fml.editionaction.TechnologySpecificAction;
+import org.openflexo.foundation.fml.editionaction.TechnologySpecificActionDefiningReceiver;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Embedded;
@@ -72,7 +73,7 @@ import org.openflexo.technologyadapter.kafka.model.KafkaTopic;
 @XMLElement
 @ImplementationClass(CreateConsumerAction.CreateConsumerActionImpl.class)
 @FML("CreateConsumer")
-public interface CreateConsumerAction extends TechnologySpecificAction<KafkaModelSlot, KafkaServer, KafkaListener> {
+public interface CreateConsumerAction extends TechnologySpecificActionDefiningReceiver<KafkaModelSlot, KafkaServer, KafkaListener> {
 
 	@PropertyIdentifier(type = String.class)
 	String TOPICS = "topics";
@@ -97,7 +98,8 @@ public interface CreateConsumerAction extends TechnologySpecificAction<KafkaMode
 	@Setter(TOPICS)
 	void setTopics(List<KafkaTopic> topics);
 
-	@Getter(ACTION_NAME) @XMLAttribute
+	@Getter(ACTION_NAME)
+	@XMLAttribute
 	String getActionName();
 
 	@Setter(ACTION_NAME)
@@ -109,10 +111,8 @@ public interface CreateConsumerAction extends TechnologySpecificAction<KafkaMode
 
 	void setAction(ActionScheme action);
 
-	abstract class CreateConsumerActionImpl
-		extends TechnologySpecificActionImpl<KafkaModelSlot, KafkaServer, KafkaListener>
-		implements CreateConsumerAction
-	{
+	abstract class CreateConsumerActionImpl extends TechnologySpecificActionDefiningReceiverImpl<KafkaModelSlot, KafkaServer, KafkaListener>
+			implements CreateConsumerAction {
 
 		private static final Logger logger = Logger.getLogger(CreateConsumerAction.class.getPackage().getName());
 
@@ -125,6 +125,7 @@ public interface CreateConsumerAction extends TechnologySpecificAction<KafkaMode
 			addTopic(kafkaTopic);
 		}
 
+		@Override
 		public ActionScheme getAction() {
 			String actionName = getActionName();
 			if (action == null && actionName != null) {
@@ -175,7 +176,6 @@ public interface CreateConsumerAction extends TechnologySpecificAction<KafkaMode
 			}
 
 		}
-
 
 		@Override
 		public Type getAssignableType() {

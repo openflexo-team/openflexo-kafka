@@ -75,14 +75,14 @@ import java.lang.reflect.Type;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
-import org.openflexo.foundation.fml.editionaction.TechnologySpecificAction;
-import org.openflexo.foundation.fml.rt.ModelSlotInstance;
+import org.openflexo.foundation.fml.editionaction.TechnologySpecificActionDefiningReceiver;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -101,7 +101,7 @@ import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 @XMLElement
 @ImplementationClass(SendRecordAction.SendRecordActionImpl.class)
 @FML("SendRecord")
-public interface SendRecordAction extends TechnologySpecificAction<KafkaModelSlot, KafkaServer, String> {
+public interface SendRecordAction extends TechnologySpecificActionDefiningReceiver<KafkaModelSlot, KafkaServer, String> {
 
 	@PropertyIdentifier(type = String.class)
 	String TOPIC_KEY = "topic";
@@ -123,7 +123,8 @@ public interface SendRecordAction extends TechnologySpecificAction<KafkaModelSlo
 	@Setter(RECORD_KEY)
 	void setRecord(DataBinding<String> record);
 
-	abstract class SendRecordActionImpl extends TechnologySpecificActionImpl<KafkaModelSlot, KafkaServer, String> implements SendRecordAction {
+	abstract class SendRecordActionImpl extends TechnologySpecificActionDefiningReceiverImpl<KafkaModelSlot, KafkaServer, String>
+			implements SendRecordAction {
 
 		private static final Logger logger = Logger.getLogger(SendRecordAction.class.getPackage().getName());
 
@@ -132,14 +133,9 @@ public interface SendRecordAction extends TechnologySpecificAction<KafkaModelSlo
 		@Override
 		public String execute(RunTimeEvaluationContext evaluationContext) {
 
-			ModelSlotInstance<KafkaModelSlot, KafkaServer> modelSlotInstance = getModelSlotInstance(evaluationContext);
-			if (modelSlotInstance == null) {
-				logger.warning("Could not access model slot instance. Abort.");
-				return null;
-			}
-			KafkaServer kafkaServer = modelSlotInstance.getAccessedResourceData();
+			KafkaServer kafkaServer = getReceiver(evaluationContext);
 			if (kafkaServer == null) {
-				logger.warning("Could not access model addressed by model slot instance. Abort.");
+				logger.warning("Could not access model addressed by receiver. Abort.");
 				return null;
 			}
 
@@ -155,7 +151,6 @@ public interface SendRecordAction extends TechnologySpecificAction<KafkaModelSlo
 			}
 
 		}
-
 
 		@Override
 		public DataBinding<String> getRecord() {

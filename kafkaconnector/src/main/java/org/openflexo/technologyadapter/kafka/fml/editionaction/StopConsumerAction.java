@@ -39,11 +39,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
-import org.openflexo.foundation.fml.editionaction.TechnologySpecificAction;
+import org.openflexo.foundation.fml.editionaction.TechnologySpecificActionDefiningReceiver;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
@@ -58,10 +59,10 @@ import org.openflexo.technologyadapter.kafka.model.KafkaListener;
 @XMLElement
 @ImplementationClass(StopConsumerAction.StopConsumerActionImpl.class)
 @FML("StopConsumer")
-public interface StopConsumerAction extends TechnologySpecificAction<KafkaModelSlot, KafkaListener, Boolean> {
+public interface StopConsumerAction extends TechnologySpecificActionDefiningReceiver<KafkaModelSlot, KafkaListener, Boolean> {
 
-	abstract class StopConsumerActionImpl extends TechnologySpecificActionImpl<KafkaModelSlot, KafkaListener, Boolean> implements
-			StopConsumerAction {
+	abstract class StopConsumerActionImpl extends TechnologySpecificActionDefiningReceiverImpl<KafkaModelSlot, KafkaListener, Boolean>
+			implements StopConsumerAction {
 
 		private static final Logger logger = Logger.getLogger(StopConsumerAction.class.getPackage().getName());
 
@@ -89,7 +90,6 @@ public interface StopConsumerAction extends TechnologySpecificAction<KafkaModelS
 			}
 
 		}
-
 
 		@Override
 		public Type getAssignableType() {
