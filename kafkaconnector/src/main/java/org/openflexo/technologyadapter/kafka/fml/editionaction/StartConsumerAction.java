@@ -43,7 +43,6 @@ import java.util.logging.Logger;
 import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.editionaction.TechnologySpecificActionDefiningReceiver;
@@ -85,12 +84,14 @@ public interface StartConsumerAction extends TechnologySpecificActionDefiningRec
 				}
 
 				FlexoConceptInstance instance = evaluationContext.getFlexoConceptInstance();
-				FlexoEditor editor = null;
+				FlexoProject<?> project = null;
 				if (instance.getVirtualModelInstance().getResourceCenter() instanceof FlexoProject) {
-					FlexoProject project = (FlexoProject) instance.getVirtualModelInstance().getResourceCenter();
-					editor = getServiceManager().getProjectLoaderService().getEditorForProject(project);
+					project = (FlexoProject<?>) instance.getVirtualModelInstance().getResourceCenter();
 				}
-				listener.start(instance, editor);
+				else if (instance.getVirtualModelInstance().getResourceCenter().getDelegatingProjectResource() != null) {
+					project = instance.getVirtualModelInstance().getResourceCenter().getDelegatingProjectResource().getFlexoProject();
+				}
+				listener.start(instance, getServiceManager().getProjectLoaderService().getEditorForProject(project));
 				return true;
 
 			} catch (TypeMismatchException | NullReferenceException | InvocationTargetException e) {
