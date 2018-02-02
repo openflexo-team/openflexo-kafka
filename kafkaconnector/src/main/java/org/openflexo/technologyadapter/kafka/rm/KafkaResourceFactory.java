@@ -35,6 +35,7 @@
 
 package org.openflexo.technologyadapter.kafka.rm;
 
+import org.apache.commons.io.FilenameUtils;
 import org.openflexo.foundation.FlexoEditingContext;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.RepositoryFolder;
@@ -45,7 +46,6 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
 import org.openflexo.technologyadapter.kafka.model.KafkaFactory;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
-import org.openflexo.toolbox.StringUtils;
 
 /**
  *
@@ -53,7 +53,7 @@ import org.openflexo.toolbox.StringUtils;
 public class KafkaResourceFactory
 		extends TechnologySpecificPamelaResourceFactory<KafkaResource, KafkaServer, KafkaTechnologyAdapter, KafkaFactory> {
 
-	public static final String KAFKA_EXTENSION = ".kafka";
+	public static final String KAFKA_EXTENSION = "kafka";
 
 	public KafkaResourceFactory() throws ModelDefinitionException {
 		super(KafkaResource.class);
@@ -74,7 +74,7 @@ public class KafkaResourceFactory
 	@Override
 	public <I> boolean isValidArtefact(I serializationArtefact, FlexoResourceCenter<I> resourceCenter) {
 		String name = resourceCenter.retrieveName(serializationArtefact);
-		return StringUtils.hasExtension(name, KAFKA_EXTENSION);
+		return FilenameUtils.isExtension(name, KAFKA_EXTENSION);
 	}
 
 	@Override
