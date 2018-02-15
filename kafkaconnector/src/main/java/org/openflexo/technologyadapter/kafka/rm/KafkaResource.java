@@ -75,45 +75,43 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResource.KafkaResourceImpl;
 @XMLElement
 @ImplementationClass(KafkaResourceImpl.class)
 public interface KafkaResource
-extends
-        PamelaResource<KafkaServer, KafkaFactory>,
-        TechnologyAdapterResource<KafkaServer, KafkaTechnologyAdapter>
-{
-    
-    String TECHNOLOGY_CONTEXT_MANAGER = "technologyContextManager";
+		extends PamelaResource<KafkaServer, KafkaFactory>, TechnologyAdapterResource<KafkaServer, KafkaTechnologyAdapter> {
 
-    @Getter(value=TECHNOLOGY_CONTEXT_MANAGER, ignoreType=true)
-    KafkaTechnologyContextManager getTechnologyContextManager();
+	String TECHNOLOGY_CONTEXT_MANAGER = "technologyContextManager";
 
-    @Setter(TECHNOLOGY_CONTEXT_MANAGER)
-    void setTechnologyContextManager(KafkaTechnologyContextManager contextManager);
+	@Override
+	@Getter(value = TECHNOLOGY_CONTEXT_MANAGER, ignoreType = true)
+	KafkaTechnologyContextManager getTechnologyContextManager();
 
-    abstract class KafkaResourceImpl extends PamelaResourceImpl<KafkaServer, KafkaFactory> implements KafkaResource {
+	@Setter(TECHNOLOGY_CONTEXT_MANAGER)
+	void setTechnologyContextManager(KafkaTechnologyContextManager contextManager);
 
-        public KafkaTechnologyAdapter getTechnologyAdapter() {
-            if (getServiceManager() != null) {
-                return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(KafkaTechnologyAdapter.class);
-            }
-            return null;
-        }
+	abstract class KafkaResourceImpl extends PamelaResourceImpl<KafkaServer, KafkaFactory> implements KafkaResource {
 
-        public Class<KafkaServer> getResourceDataClass() {
-            return KafkaServer.class;
-        }
+		@Override
+		public KafkaTechnologyAdapter getTechnologyAdapter() {
+			if (getServiceManager() != null) {
+				return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(KafkaTechnologyAdapter.class);
+			}
+			return null;
+		}
 
-        @Override
-        public void unloadResourceData(boolean deleteResourceData) {
-            KafkaServer model = getLoadedResourceData();
-            if (model != null) {
-                KafkaProducer<String, String> producer = model.getProducer();
-                if (producer != null) {
-                    producer.close();
-                }
-                for (KafkaListener listener : model.getListeners()) {
-                    listener.stop();
-                }
-            }
-            super.unloadResourceData(deleteResourceData);
-        }
-    }
+		@Override
+		public Class<KafkaServer> getResourceDataClass() {
+			return KafkaServer.class;
+		}
+
+		@Override
+		public void unloadResourceData(boolean deleteResourceData) {
+			KafkaServer model = getLoadedResourceData();
+			if (model != null) {
+				try (KafkaProducer<String, String> producer = model.getProducer()) {
+					for (KafkaListener listener : model.getListeners()) {
+						listener.stop();
+					}
+				}
+			}
+			super.unloadResourceData(deleteResourceData);
+		}
+	}
 }
