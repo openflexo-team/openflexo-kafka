@@ -36,7 +36,6 @@
 package org.openflexo.technologyadapter.kafka.model;
 
 import org.openflexo.foundation.DefaultPamelaResourceModelFactory;
-import org.openflexo.foundation.PamelaResourceModelFactory;
 import org.openflexo.foundation.action.FlexoUndoManager;
 import org.openflexo.foundation.resource.PamelaResourceImpl.IgnoreLoadingEdits;
 import org.openflexo.model.converter.RelativePathResourceConverter;
@@ -48,7 +47,7 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
  * @author charlie
  *
  */
-public class KafkaFactory<T> extends DefaultPamelaResourceModelFactory<KafkaResource> implements PamelaResourceModelFactory<KafkaResource> {
+public class KafkaFactory<T> extends DefaultPamelaResourceModelFactory<KafkaResource> {
 
 	private final KafkaResource resource;
 
@@ -69,6 +68,7 @@ public class KafkaFactory<T> extends DefaultPamelaResourceModelFactory<KafkaReso
 
 	/**
 	 * Creates empty model that needs to be initialized
+	 * 
 	 * @return the created model
 	 */
 	public KafkaServer makeEmptyModel() {
@@ -97,7 +97,6 @@ public class KafkaFactory<T> extends DefaultPamelaResourceModelFactory<KafkaReso
 	public void stopDeserializing() {
 		stopIgnoringEdits();
 	}
-
 
 	public void startIgnoringEdits() {
 		EditingContext editingContext = getResource().getServiceManager().getEditingContext();
