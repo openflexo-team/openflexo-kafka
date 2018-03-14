@@ -53,10 +53,11 @@ import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.gina.controller.FIBController;
 import org.openflexo.technologyadapter.kafka.library.KafkaIconLibrary;
 import org.openflexo.technologyadapter.kafka.model.action.CreateKafkaServer;
+import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class CreateKafkaServerInitializer extends ActionInitializer<CreateKafkaServer, RepositoryFolder, FlexoObject> {
+public class CreateKafkaServerInitializer extends ActionInitializer<CreateKafkaServer, RepositoryFolder<KafkaResource, ?>, FlexoObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
