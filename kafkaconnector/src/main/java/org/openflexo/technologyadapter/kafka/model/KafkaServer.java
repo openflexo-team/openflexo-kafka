@@ -37,6 +37,7 @@ package org.openflexo.technologyadapter.kafka.model;
 
 import java.util.List;
 import java.util.Properties;
+
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.ResourceData;
@@ -59,22 +60,25 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
 /**
  * Configuration to a Kafka service
  */
-@ModelEntity @XMLElement
+@ModelEntity
+@XMLElement
 @ImplementationClass(KafkaServerImpl.class)
-@Imports( { @Import(KafkaListener.class) })
+@Imports({ @Import(KafkaListener.class) })
 public interface KafkaServer extends TechnologyObject<KafkaTechnologyAdapter>, ResourceData<KafkaServer> {
 
 	String SERVER_KEY = "server";
 	String ZOOKEEPER_KEY = "zookeeper";
 	String LISTENERS_KEY = "listener";
 
-	@Getter(SERVER_KEY) @XMLAttribute
+	@Getter(SERVER_KEY)
+	@XMLAttribute
 	String getServer();
 
 	@Setter(SERVER_KEY)
 	void setServer(String server);
 
-	@Getter(ZOOKEEPER_KEY) @XMLAttribute
+	@Getter(ZOOKEEPER_KEY)
+	@XMLAttribute
 	String getZookeeper();
 
 	@Setter(ZOOKEEPER_KEY)
@@ -104,6 +108,7 @@ public interface KafkaServer extends TechnologyObject<KafkaTechnologyAdapter>, R
 			properties.put("bootstrap.servers", getServer());
 		}
 
+		@Override
 		public Properties getConsumerProperties() {
 			Properties properties = new Properties();
 			fillCommonProperties(properties);
@@ -116,7 +121,7 @@ public interface KafkaServer extends TechnologyObject<KafkaTechnologyAdapter>, R
 			return properties;
 		}
 
-		public Properties getProducerProperties(){
+		public Properties getProducerProperties() {
 			Properties properties = new Properties();
 			fillCommonProperties(properties);
 			properties.put("acks", "all");
