@@ -89,27 +89,28 @@ import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
 import org.openflexo.technologyadapter.kafka.rm.KafkaResourceFactory;
 
-public class CreateKafkaServer extends FlexoAction<CreateKafkaServer, RepositoryFolder, FlexoObject> {
+public class CreateKafkaServer extends FlexoAction<CreateKafkaServer, RepositoryFolder<KafkaResource, ?>, FlexoObject> {
 
-	public static FlexoActionFactory<CreateKafkaServer, RepositoryFolder, FlexoObject> actionType = new FlexoActionFactory<CreateKafkaServer, RepositoryFolder, FlexoObject>(
+	public static FlexoActionFactory<CreateKafkaServer, RepositoryFolder<KafkaResource, ?>, FlexoObject> actionType = new FlexoActionFactory<CreateKafkaServer, RepositoryFolder<KafkaResource, ?>, FlexoObject>(
 			"create_kafka_model", FlexoActionFactory.newMenu, FlexoActionFactory.defaultGroup, FlexoActionFactory.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateKafkaServer makeNewAction(RepositoryFolder focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
+		public CreateKafkaServer makeNewAction(RepositoryFolder<KafkaResource, ?> focusedObject, Vector<FlexoObject> globalSelection,
+				FlexoEditor editor) {
 			return new CreateKafkaServer(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		public boolean isVisibleForSelection(RepositoryFolder object, Vector<FlexoObject> globalSelection) {
+		public boolean isVisibleForSelection(RepositoryFolder<KafkaResource, ?> object, Vector<FlexoObject> globalSelection) {
 			// TODO check what should be done
 			return true;
 		}
 
 		@Override
-		public boolean isEnabledForSelection(RepositoryFolder object, Vector<FlexoObject> globalSelection) {
+		public boolean isEnabledForSelection(RepositoryFolder<KafkaResource, ?> object, Vector<FlexoObject> globalSelection) {
 			return object != null;
 		}
 
@@ -147,7 +148,7 @@ public class CreateKafkaServer extends FlexoAction<CreateKafkaServer, Repository
 		this.zookeeper = zookeeper;
 	}
 
-	CreateKafkaServer(RepositoryFolder focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
+	private CreateKafkaServer(RepositoryFolder<KafkaResource, ?> focusedObject, Vector<FlexoObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
