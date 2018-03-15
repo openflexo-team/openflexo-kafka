@@ -127,7 +127,7 @@ public interface KafkaListenerActorReference extends ActorReference<KafkaListene
 			if (listener == null) {
 				KafkaServer server = getServer();
 				if (server != null) {
-					KafkaFactory factory = server.getResource().getFactory();
+					KafkaFactory<?> factory = server.getResource().getFactory();
 					KafkaListener listener = factory.makeNewListener(server);
 					getTopics().forEach((t) -> listener.addTopic(factory.makeNewTopic(t.getName())));
 					listener.setActionName(getActionName());

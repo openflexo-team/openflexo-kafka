@@ -51,7 +51,7 @@ import org.openflexo.technologyadapter.kafka.model.KafkaServer;
  *
  */
 public class KafkaResourceFactory
-		extends TechnologySpecificPamelaResourceFactory<KafkaResource, KafkaServer, KafkaTechnologyAdapter, KafkaFactory> {
+		extends TechnologySpecificPamelaResourceFactory<KafkaResource, KafkaServer, KafkaTechnologyAdapter, KafkaFactory<?>> {
 
 	public static final String KAFKA_EXTENSION = "kafka";
 
@@ -63,7 +63,7 @@ public class KafkaResourceFactory
 	public KafkaFactory<?> makeResourceDataFactory(KafkaResource resource,
 			TechnologyContextManager<KafkaTechnologyAdapter> technologyContextManager) throws ModelDefinitionException {
 		FlexoEditingContext editingContext = technologyContextManager.getServiceManager().getEditingContext();
-		return new KafkaFactory(resource, editingContext);
+		return new KafkaFactory<>(resource, editingContext);
 	}
 
 	@Override

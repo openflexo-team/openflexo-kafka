@@ -75,7 +75,7 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResource.KafkaResourceImpl;
 @XMLElement
 @ImplementationClass(KafkaResourceImpl.class)
 public interface KafkaResource
-		extends PamelaResource<KafkaServer, KafkaFactory>, TechnologyAdapterResource<KafkaServer, KafkaTechnologyAdapter> {
+		extends PamelaResource<KafkaServer, KafkaFactory<?>>, TechnologyAdapterResource<KafkaServer, KafkaTechnologyAdapter> {
 
 	String TECHNOLOGY_CONTEXT_MANAGER = "technologyContextManager";
 
@@ -86,7 +86,7 @@ public interface KafkaResource
 	@Setter(TECHNOLOGY_CONTEXT_MANAGER)
 	void setTechnologyContextManager(KafkaTechnologyContextManager contextManager);
 
-	abstract class KafkaResourceImpl extends PamelaResourceImpl<KafkaServer, KafkaFactory> implements KafkaResource {
+	abstract class KafkaResourceImpl extends PamelaResourceImpl<KafkaServer, KafkaFactory<?>> implements KafkaResource {
 
 		@Override
 		public KafkaTechnologyAdapter getTechnologyAdapter() {
