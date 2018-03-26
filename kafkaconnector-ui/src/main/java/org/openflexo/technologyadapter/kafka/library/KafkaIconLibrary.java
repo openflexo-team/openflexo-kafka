@@ -20,19 +20,18 @@
 
 package org.openflexo.technologyadapter.kafka.library;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.icon.ImageIconResource;
 import org.openflexo.rm.ResourceLocator;
-
 
 public class KafkaIconLibrary {
 	public static final ImageIcon KAFKA_TECHNOLOGY_BIG_ICON = new ImageIconResource(ResourceLocator.locateResource("Icons/kafka_big.png"));
 	public static final ImageIcon KAFKA_TECHNOLOGY_ICON = new ImageIconResource(ResourceLocator.locateResource("Icons/kafka.png"));
 	public static final ImageIcon KAFKA_FILE_ICON = new ImageIconResource(ResourceLocator.locateResource("Icons/kafka.png"));
 
-
-	public static ImageIcon iconForObject(Class<? extends TechnologyObject> objectClass) {
+	public static ImageIcon iconForObject(Class<? extends TechnologyObject<?>> objectClass) {
 		return KAFKA_TECHNOLOGY_ICON;
 	}
 }

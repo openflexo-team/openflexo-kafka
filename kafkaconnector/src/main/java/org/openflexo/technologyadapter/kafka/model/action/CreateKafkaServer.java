@@ -169,8 +169,6 @@ public class CreateKafkaServer extends FlexoAction<CreateKafkaServer, Repository
 		try {
 			KafkaTechnologyAdapter technologyAdapter = getTechnologyAdapter();
 			KafkaResourceFactory resourceFactory = technologyAdapter.getResourceFactory(KafkaResourceFactory.class);
-			TechnologyContextManager<KafkaTechnologyAdapter> technologyContextManager = (TechnologyContextManager<KafkaTechnologyAdapter>) technologyAdapter
-					.getTechnologyContextManager();
 			KafkaResource resource = resourceFactory.makeKafkaServerResource(resourceName, getFocusedObject());
 			KafkaServer model = resource.getResourceData(null);
 			model.setServer(getServer());
