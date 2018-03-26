@@ -46,9 +46,9 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResourceFactory;
 /**
  * Kafka connector for OpenFlexo
  */
-@DeclareModelSlots({KafkaModelSlot.class})
-@DeclareResourceTypes({KafkaResourceFactory.class})
-public class KafkaTechnologyAdapter extends TechnologyAdapter {
+@DeclareModelSlots({ KafkaModelSlot.class })
+@DeclareResourceTypes({ KafkaResourceFactory.class })
+public class KafkaTechnologyAdapter extends TechnologyAdapter<KafkaTechnologyAdapter> {
 
 	@Override
 	public String getIdentifier() {
