@@ -191,7 +191,7 @@ public interface CreateKafkaResource extends AbstractCreateResource<KafkaModelSl
 
 				KafkaResource newResource = createResource(technologyAdapter, KafkaResourceFactory.class, rc, resourceName, resourceURI,
 						getRelativePath(), ".kafka", true);
-				KafkaServer server = newResource.getResourceData(null);
+				KafkaServer server = newResource.getResourceData();
 				server.setServer(getServer().getBindingValue(evaluationContext));
 				server.setZookeeper(getZookeeper().getBindingValue(evaluationContext));
 
