@@ -77,11 +77,6 @@ public class KafkaResourceFactory
 		return FilenameUtils.isExtension(name, KAFKA_EXTENSION);
 	}
 
-	@Override
-	public <I> I getConvertableArtefact(I serializationArtefact, FlexoResourceCenter<I> resourceCenter) {
-		return null;
-	}
-
 	public <I> KafkaResource makeKafkaServerResource(String baseName, RepositoryFolder<KafkaResource, I> folder)
 			throws SaveResourceException, ModelDefinitionException {
 
