@@ -61,7 +61,7 @@ public class KafkaTechnologyAdapter extends TechnologyAdapter<KafkaTechnologyAda
 	}
 
 	@Override
-	public String getLocalizationDirectory() {
+	protected String getLocalizationDirectory() {
 		return "FlexoLocalization/KafkaTechnologyAdapter";
 	}
 
