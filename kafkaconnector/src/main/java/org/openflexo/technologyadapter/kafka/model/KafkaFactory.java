@@ -38,9 +38,9 @@ package org.openflexo.technologyadapter.kafka.model;
 import org.openflexo.foundation.DefaultPamelaResourceModelFactory;
 import org.openflexo.foundation.action.FlexoUndoManager;
 import org.openflexo.foundation.resource.PamelaResourceImpl.IgnoreLoadingEdits;
-import org.openflexo.model.converter.RelativePathResourceConverter;
-import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.model.factory.EditingContext;
+import org.openflexo.pamela.converter.RelativePathResourceConverter;
+import org.openflexo.pamela.exceptions.ModelDefinitionException;
+import org.openflexo.pamela.factory.EditingContext;
 import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
 
 /**
