@@ -60,7 +60,7 @@ public class KafkaResourceFactory
 	}
 
 	@Override
-	public KafkaFactory<?> makeResourceDataFactory(KafkaResource resource,
+	public KafkaFactory<?> makeModelFactory(KafkaResource resource,
 			TechnologyContextManager<KafkaTechnologyAdapter> technologyContextManager) throws ModelDefinitionException {
 		FlexoEditingContext editingContext = technologyContextManager.getServiceManager().getEditingContext();
 		return new KafkaFactory<>(resource, editingContext);
