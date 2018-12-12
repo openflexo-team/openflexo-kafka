@@ -36,7 +36,7 @@
 package org.openflexo.technologyadapter.kafka;
 
 import org.openflexo.foundation.fml.annotations.DeclareModelSlots;
-import org.openflexo.foundation.fml.annotations.DeclareResourceTypes;
+import org.openflexo.foundation.fml.annotations.DeclareResourceFactory;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
@@ -47,7 +47,7 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResourceFactory;
  * Kafka connector for OpenFlexo
  */
 @DeclareModelSlots({ KafkaModelSlot.class })
-@DeclareResourceTypes({ KafkaResourceFactory.class })
+@DeclareResourceFactory({ KafkaResourceFactory.class })
 public class KafkaTechnologyAdapter extends TechnologyAdapter<KafkaTechnologyAdapter> {
 
 	@Override
