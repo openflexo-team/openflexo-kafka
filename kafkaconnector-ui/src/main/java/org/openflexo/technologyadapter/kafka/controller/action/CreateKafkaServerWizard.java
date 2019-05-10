@@ -38,10 +38,11 @@
 
 package org.openflexo.technologyadapter.kafka.controller.action;
 
-import java.awt.*;
+import java.awt.Image;
 import java.util.logging.Logger;
+
 import org.openflexo.ApplicationContext;
-import org.openflexo.components.wizard.FlexoWizard;
+import org.openflexo.components.wizard.FlexoActionWizard;
 import org.openflexo.components.wizard.WizardStep;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance;
@@ -53,24 +54,21 @@ import org.openflexo.technologyadapter.kafka.model.action.CreateKafkaServer;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.view.controller.FlexoController;
 
-public class CreateKafkaServerWizard extends FlexoWizard {
+public class CreateKafkaServerWizard extends FlexoActionWizard<CreateKafkaServer> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CreateKafkaServerWizard.class.getPackage().getName());
 
-	private final CreateKafkaServer action;
-
 	private final ConfigureKafkaServer configureKafkaServer;
 
 	public CreateKafkaServerWizard(CreateKafkaServer action, FlexoController controller) {
-		super(controller);
-		this.action = action;
+		super(action, controller);
 		addStep(configureKafkaServer = new ConfigureKafkaServer());
 	}
 
 	@Override
 	public String getWizardTitle() {
-		return action.getLocales().localizedForKey("create_kafka_server");
+		return getAction().getLocales().localizedForKey("create_kafka_server");
 	}
 
 	@Override
@@ -97,19 +95,19 @@ public class CreateKafkaServerWizard extends FlexoWizard {
 		}
 
 		public CreateKafkaServer getAction() {
-			return action;
+			return CreateKafkaServerWizard.this.getAction();
 		}
 
 		@Override
 		public String getTitle() {
-			return action.getLocales().localizedForKey("configure_kafka_server");
+			return getAction().getLocales().localizedForKey("configure_kafka_server");
 		}
 
 		@Override
 		public boolean isValid() {
 
 			if (StringUtils.isEmpty(getAddress())) {
-				setIssueMessage(action.getLocales().localizedForKey("no_address_defined"), IssueMessageType.ERROR);
+				setIssueMessage(getAction().getLocales().localizedForKey("no_address_defined"), IssueMessageType.ERROR);
 				return false;
 			}
 
@@ -118,29 +116,30 @@ public class CreateKafkaServerWizard extends FlexoWizard {
 		}
 
 		public String getResourceName() {
-			return action.getResourceName();
+			return getAction().getResourceName();
 		}
 
 		public void setResourceName(String newResourceName) {
 			if (!newResourceName.equals(getResourceName())) {
 				String oldValue = getResourceName();
-				action.setResourceName(newResourceName);
+				getAction().setResourceName(newResourceName);
 				getPropertyChangeSupport().firePropertyChange("resourceName", oldValue, newResourceName);
 				checkValidity();
 			}
 		}
 
 		public String getAddress() {
-			return action.getServer();
+			return getAction().getServer();
 		}
 
 		public void setAddress(String newAddress) {
 			if (!newAddress.equals(getAddress())) {
 				String oldValue = getAddress();
-				action.setServer(newAddress);
+				getAction().setServer(newAddress);
 				getPropertyChangeSupport().firePropertyChange("address", oldValue, newAddress);
 				checkValidity();
 			}
 		}
 	}
+
 }
