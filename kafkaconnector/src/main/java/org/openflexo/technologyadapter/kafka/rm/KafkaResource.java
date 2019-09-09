@@ -57,7 +57,7 @@ package org.openflexo.technologyadapter.kafka.rm;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.openflexo.foundation.resource.PamelaResource;
-import org.openflexo.foundation.resource.PamelaResourceImpl;
+import org.openflexo.foundation.resource.PamelaXMLSerializableResourceImpl;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.ImplementationClass;
@@ -86,7 +86,7 @@ public interface KafkaResource
 	@Setter(TECHNOLOGY_CONTEXT_MANAGER)
 	void setTechnologyContextManager(KafkaTechnologyContextManager contextManager);
 
-	abstract class KafkaResourceImpl extends PamelaResourceImpl<KafkaServer, KafkaFactory<?>> implements KafkaResource {
+	abstract class KafkaResourceImpl extends PamelaXMLSerializableResourceImpl<KafkaServer, KafkaFactory<?>> implements KafkaResource {
 
 		@Override
 		public KafkaTechnologyAdapter getTechnologyAdapter() {
