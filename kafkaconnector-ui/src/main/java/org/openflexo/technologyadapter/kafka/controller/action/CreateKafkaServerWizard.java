@@ -74,7 +74,7 @@ public class CreateKafkaServerWizard extends FlexoActionWizard<CreateKafkaServer
 	@Override
 	public Image getDefaultPageImage() {
 		// TODO change icon
-		return IconFactory.getImageIcon(FMLIconLibrary.FLEXO_CONCEPT_BIG_ICON, IconLibrary.NEW_32_32).getImage();
+		return IconFactory.getImageIcon(FMLIconLibrary.FLEXO_CONCEPT_BIG_ICON, IconLibrary.BIG_NEW_MARKER).getImage();
 	}
 
 	public ConfigureKafkaServer getConfigureKafkaServer() {
