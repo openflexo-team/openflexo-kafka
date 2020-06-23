@@ -38,16 +38,13 @@
 
 package org.openflexo.technologyadapter.kafka.controller.action;
 
-import java.util.EventObject;
-import java.util.logging.Logger;
-import javax.swing.*;
+import javax.swing.Icon;
+
 import org.openflexo.components.wizard.Wizard;
 import org.openflexo.components.wizard.WizardDialog;
-import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.action.FlexoActionFinalizer;
-import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoActionFactory;
+import org.openflexo.foundation.action.FlexoActionRunnable;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.gina.controller.FIBController;
@@ -59,52 +56,31 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 
 public class CreateKafkaServerInitializer extends ActionInitializer<CreateKafkaServer, RepositoryFolder<KafkaResource, ?>, FlexoObject> {
 
-	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
-
 	public CreateKafkaServerInitializer(ControllerActionInitializer actionInitializer) {
 		super(CreateKafkaServer.actionType, actionInitializer);
 	}
 
 	@Override
-	protected FlexoActionInitializer<CreateKafkaServer> getDefaultInitializer() {
-		return new FlexoActionInitializer<CreateKafkaServer>() {
-			@Override
-			public boolean run(EventObject e, CreateKafkaServer action) {
-				Wizard wizard = new CreateKafkaServerWizard(action, getController());
-				WizardDialog dialog = new WizardDialog(wizard, getController());
-				dialog.showDialog();
-				if (dialog.getStatus() != FIBController.Status.VALIDATED) {
-					// Operation cancelled
-					return false;
-				}
-				return true;
-			}
-		};
-	}
-
-	@Override
-	protected FlexoActionFinalizer<CreateKafkaServer> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<CreateKafkaServer>() {
-			@Override
-			public boolean run(EventObject e, CreateKafkaServer action) {
-				return true;
-			}
-		};
-	}
-
-	@Override
-	protected FlexoExceptionHandler<CreateKafkaServer> getDefaultExceptionHandler() {
-		return new FlexoExceptionHandler<CreateKafkaServer>() {
-			@Override
-			public boolean handleException(FlexoException exception, CreateKafkaServer action) {
+	protected FlexoActionRunnable<CreateKafkaServer, RepositoryFolder<KafkaResource, ?>, FlexoObject> getDefaultInitializer() {
+		return (e, action) -> {
+			Wizard wizard = new CreateKafkaServerWizard(action, getController());
+			WizardDialog dialog = new WizardDialog(wizard, getController());
+			dialog.showDialog();
+			if (dialog.getStatus() != FIBController.Status.VALIDATED) {
+				// Operation cancelled
 				return false;
 			}
+			return true;
 		};
 	}
 
 	@Override
-	protected Icon getEnabledIcon(FlexoActionFactory actionType) {
-		return KafkaIconLibrary.KAFKA_FILE_ICON;
+	protected FlexoExceptionHandler<CreateKafkaServer, RepositoryFolder<KafkaResource, ?>, FlexoObject> getDefaultExceptionHandler() {
+		return (exception, action) -> false;
 	}
 
+	@Override
+	protected Icon getEnabledIcon(FlexoActionFactory<CreateKafkaServer, RepositoryFolder<KafkaResource, ?>, FlexoObject> actionType) {
+		return KafkaIconLibrary.KAFKA_FILE_ICON;
+	}
 }

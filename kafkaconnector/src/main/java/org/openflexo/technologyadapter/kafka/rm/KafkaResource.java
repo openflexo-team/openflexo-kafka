@@ -59,11 +59,11 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.openflexo.foundation.resource.PamelaResource;
 import org.openflexo.foundation.resource.PamelaResourceImpl;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
-import org.openflexo.model.annotations.Getter;
-import org.openflexo.model.annotations.ImplementationClass;
-import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.model.annotations.Setter;
-import org.openflexo.model.annotations.XMLElement;
+import org.openflexo.pamela.annotations.Getter;
+import org.openflexo.pamela.annotations.ImplementationClass;
+import org.openflexo.pamela.annotations.ModelEntity;
+import org.openflexo.pamela.annotations.Setter;
+import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyContextManager;
 import org.openflexo.technologyadapter.kafka.model.KafkaFactory;
@@ -75,7 +75,7 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResource.KafkaResourceImpl;
 @XMLElement
 @ImplementationClass(KafkaResourceImpl.class)
 public interface KafkaResource
-		extends PamelaResource<KafkaServer, KafkaFactory>, TechnologyAdapterResource<KafkaServer, KafkaTechnologyAdapter> {
+		extends PamelaResource<KafkaServer, KafkaFactory<?>>, TechnologyAdapterResource<KafkaServer, KafkaTechnologyAdapter> {
 
 	String TECHNOLOGY_CONTEXT_MANAGER = "technologyContextManager";
 
@@ -86,7 +86,7 @@ public interface KafkaResource
 	@Setter(TECHNOLOGY_CONTEXT_MANAGER)
 	void setTechnologyContextManager(KafkaTechnologyContextManager contextManager);
 
-	abstract class KafkaResourceImpl extends PamelaResourceImpl<KafkaServer, KafkaFactory> implements KafkaResource {
+	abstract class KafkaResourceImpl extends PamelaResourceImpl<KafkaServer, KafkaFactory<?>> implements KafkaResource {
 
 		@Override
 		public KafkaTechnologyAdapter getTechnologyAdapter() {

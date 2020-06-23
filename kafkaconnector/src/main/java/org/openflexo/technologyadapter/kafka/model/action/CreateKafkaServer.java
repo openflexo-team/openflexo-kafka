@@ -81,9 +81,8 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionFactory;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.localization.LocalizedDelegate;
-import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
@@ -169,10 +168,8 @@ public class CreateKafkaServer extends FlexoAction<CreateKafkaServer, Repository
 		try {
 			KafkaTechnologyAdapter technologyAdapter = getTechnologyAdapter();
 			KafkaResourceFactory resourceFactory = technologyAdapter.getResourceFactory(KafkaResourceFactory.class);
-			TechnologyContextManager<KafkaTechnologyAdapter> technologyContextManager = (TechnologyContextManager<KafkaTechnologyAdapter>) technologyAdapter
-					.getTechnologyContextManager();
 			KafkaResource resource = resourceFactory.makeKafkaServerResource(resourceName, getFocusedObject());
-			KafkaServer model = resource.getResourceData(null);
+			KafkaServer model = resource.getResourceData();
 			model.setServer(getServer());
 			model.setZookeeper(getZookeeper());
 

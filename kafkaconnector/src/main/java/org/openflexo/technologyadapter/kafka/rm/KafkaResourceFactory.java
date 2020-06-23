@@ -42,7 +42,7 @@ import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.resource.TechnologySpecificPamelaResourceFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
 import org.openflexo.technologyadapter.kafka.model.KafkaFactory;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
@@ -51,7 +51,7 @@ import org.openflexo.technologyadapter.kafka.model.KafkaServer;
  *
  */
 public class KafkaResourceFactory
-		extends TechnologySpecificPamelaResourceFactory<KafkaResource, KafkaServer, KafkaTechnologyAdapter, KafkaFactory> {
+		extends TechnologySpecificPamelaResourceFactory<KafkaResource, KafkaServer, KafkaTechnologyAdapter, KafkaFactory<?>> {
 
 	public static final String KAFKA_EXTENSION = "kafka";
 
@@ -60,10 +60,10 @@ public class KafkaResourceFactory
 	}
 
 	@Override
-	public KafkaFactory<?> makeResourceDataFactory(KafkaResource resource,
+	public KafkaFactory<?> makeModelFactory(KafkaResource resource,
 			TechnologyContextManager<KafkaTechnologyAdapter> technologyContextManager) throws ModelDefinitionException {
 		FlexoEditingContext editingContext = technologyContextManager.getServiceManager().getEditingContext();
-		return new KafkaFactory(resource, editingContext);
+		return new KafkaFactory<>(resource, editingContext);
 	}
 
 	@Override
@@ -75,11 +75,6 @@ public class KafkaResourceFactory
 	public <I> boolean isValidArtefact(I serializationArtefact, FlexoResourceCenter<I> resourceCenter) {
 		String name = resourceCenter.retrieveName(serializationArtefact);
 		return FilenameUtils.isExtension(name, KAFKA_EXTENSION);
-	}
-
-	@Override
-	public <I> I getConvertableArtefact(I serializationArtefact, FlexoResourceCenter<I> resourceCenter) {
-		return null;
 	}
 
 	public <I> KafkaResource makeKafkaServerResource(String baseName, RepositoryFolder<KafkaResource, I> folder)

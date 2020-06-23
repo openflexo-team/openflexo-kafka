@@ -85,13 +85,13 @@ import org.openflexo.foundation.fml.editionaction.EditionAction;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.model.annotations.Getter;
-import org.openflexo.model.annotations.ImplementationClass;
-import org.openflexo.model.annotations.ModelEntity;
-import org.openflexo.model.annotations.Setter;
-import org.openflexo.model.annotations.XMLAttribute;
-import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.pamela.annotations.Getter;
+import org.openflexo.pamela.annotations.ImplementationClass;
+import org.openflexo.pamela.annotations.ModelEntity;
+import org.openflexo.pamela.annotations.Setter;
+import org.openflexo.pamela.annotations.XMLAttribute;
+import org.openflexo.pamela.annotations.XMLElement;
+import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.technologyadapter.kafka.KafkaModelSlot;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
@@ -189,9 +189,9 @@ public interface CreateKafkaResource extends AbstractCreateResource<KafkaModelSl
 				KafkaTechnologyAdapter technologyAdapter = getServiceManager().getTechnologyAdapterService()
 						.getTechnologyAdapter(KafkaTechnologyAdapter.class);
 
-				KafkaResource newResource = createResource(technologyAdapter, KafkaResourceFactory.class, rc, resourceName, resourceURI,
-						getRelativePath(), ".kafka", true);
-				KafkaServer server = newResource.getResourceData(null);
+				KafkaResource newResource = createResource(technologyAdapter, KafkaResourceFactory.class, evaluationContext, ".kafka",
+						true);
+				KafkaServer server = newResource.getResourceData();
 				server.setServer(getServer().getBindingValue(evaluationContext));
 				server.setZookeeper(getZookeeper().getBindingValue(evaluationContext));
 

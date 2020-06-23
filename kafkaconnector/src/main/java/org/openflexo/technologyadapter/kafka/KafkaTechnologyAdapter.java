@@ -36,7 +36,7 @@
 package org.openflexo.technologyadapter.kafka;
 
 import org.openflexo.foundation.fml.annotations.DeclareModelSlots;
-import org.openflexo.foundation.fml.annotations.DeclareResourceTypes;
+import org.openflexo.foundation.fml.annotations.DeclareResourceFactories;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
@@ -46,9 +46,9 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResourceFactory;
 /**
  * Kafka connector for OpenFlexo
  */
-@DeclareModelSlots({KafkaModelSlot.class})
-@DeclareResourceTypes({KafkaResourceFactory.class})
-public class KafkaTechnologyAdapter extends TechnologyAdapter {
+@DeclareModelSlots({ KafkaModelSlot.class })
+@DeclareResourceFactories({ KafkaResourceFactory.class })
+public class KafkaTechnologyAdapter extends TechnologyAdapter<KafkaTechnologyAdapter> {
 
 	@Override
 	public String getIdentifier() {
@@ -61,7 +61,7 @@ public class KafkaTechnologyAdapter extends TechnologyAdapter {
 	}
 
 	@Override
-	public String getLocalizationDirectory() {
+	protected String getLocalizationDirectory() {
 		return "FlexoLocalization/KafkaTechnologyAdapter";
 	}
 
