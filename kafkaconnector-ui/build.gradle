@@ -1,4 +1,4 @@
 dependencies {
-    compile project(':kafkaconnector')
-    compile flexoUi()
+    implementation project(':kafkaconnector')
+    implementation flexoUi()
 }

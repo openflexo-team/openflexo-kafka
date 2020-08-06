@@ -1,8 +1,6 @@
 dependencies {
+    implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '0.10.2.0'
+    implementation flexoFoundation()
 
-    compile group: 'org.apache.kafka', name: 'kafka-clients', version: '0.10.2.0'
-    compile flexoFoundation()
-
-    testCompile testUtils()
-    testCompile flexoFoundationTest()
+    testImplementation flexoFoundationTest()
 }
