@@ -71,7 +71,6 @@
 package org.openflexo.technologyadapter.kafka.fml.editionaction;
 
 import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
@@ -197,7 +196,7 @@ public interface CreateKafkaResource extends AbstractCreateResource<KafkaModelSl
 
 				return server;
 			} catch (ModelDefinitionException | FileNotFoundException | ResourceLoadingCancelledException | TypeMismatchException
-					| InvocationTargetException | NullReferenceException e) {
+					| ReflectiveOperationException | NullReferenceException e) {
 				throw new FlexoException(e);
 			}
 

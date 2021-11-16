@@ -70,7 +70,6 @@
 
 package org.openflexo.technologyadapter.kafka.fml.editionaction;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -145,7 +144,7 @@ public interface SendRecordAction extends TechnologySpecificActionDefiningReceiv
 				// what to do with the result
 				return null;
 
-			} catch (TypeMismatchException | NullReferenceException | InvocationTargetException e) {
+			} catch (TypeMismatchException | NullReferenceException | ReflectiveOperationException e) {
 				logger.log(Level.WARNING, "Can't send record '" + getRecord() + "'", e);
 				return null;
 			}
