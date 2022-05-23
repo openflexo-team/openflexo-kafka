@@ -35,7 +35,6 @@
 
 package org.openflexo.technologyadapter.kafka.fml.editionaction;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -84,7 +83,7 @@ public interface StopConsumerAction extends TechnologySpecificActionDefiningRece
 				listener.stop();
 				return true;
 
-			} catch (TypeMismatchException | NullReferenceException | InvocationTargetException e) {
+			} catch (TypeMismatchException | NullReferenceException | ReflectiveOperationException e) {
 				logger.log(Level.WARNING, "Can't stop consumer '" + getReceiver() + "'", e);
 				return false;
 			}

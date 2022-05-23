@@ -35,7 +35,6 @@
 
 package org.openflexo.technologyadapter.kafka.fml.editionaction;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -94,7 +93,7 @@ public interface StartConsumerAction extends TechnologySpecificActionDefiningRec
 				listener.start(instance, getServiceManager().getProjectLoaderService().getEditorForProject(project));
 				return true;
 
-			} catch (TypeMismatchException | NullReferenceException | InvocationTargetException e) {
+			} catch (TypeMismatchException | NullReferenceException | ReflectiveOperationException e) {
 				logger.log(Level.WARNING, "Can't start consumer '" + getReceiver() + "'", e);
 				return false;
 			}
