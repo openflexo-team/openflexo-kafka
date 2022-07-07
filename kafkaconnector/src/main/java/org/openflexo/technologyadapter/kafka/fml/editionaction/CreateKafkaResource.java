@@ -81,9 +81,11 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.editionaction.AbstractCreateResource;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
+import org.openflexo.foundation.fml.rt.FMLExecutionException;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
@@ -180,7 +182,7 @@ public interface CreateKafkaResource extends AbstractCreateResource<KafkaModelSl
 		}
 
 		@Override
-		public KafkaServer execute(RunTimeEvaluationContext evaluationContext) throws FlexoException {
+		public KafkaServer execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 			try {
 				String resourceName = getResourceName(evaluationContext);
 				String resourceURI = getResourceURI(evaluationContext);
@@ -197,7 +199,11 @@ public interface CreateKafkaResource extends AbstractCreateResource<KafkaModelSl
 				return server;
 			} catch (ModelDefinitionException | FileNotFoundException | ResourceLoadingCancelledException | TypeMismatchException
 					| ReflectiveOperationException | NullReferenceException e) {
-				throw new FlexoException(e);
+				throw new FMLExecutionException(e);
+			} catch (SaveResourceException e) {
+				throw new FMLExecutionException(e);
+			} catch (FlexoException e) {
+				throw new FMLExecutionException(e);
 			}
 
 		}
