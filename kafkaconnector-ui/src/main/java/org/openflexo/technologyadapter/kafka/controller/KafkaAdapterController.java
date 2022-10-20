@@ -20,7 +20,9 @@
 
 package org.openflexo.technologyadapter.kafka.controller;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.gina.utils.InspectorGroup;
@@ -86,7 +88,7 @@ public class KafkaAdapterController extends TechnologyAdapterController<KafkaTec
 	}
 
 	@Override
-	public ModuleView<?> createModuleViewForObject(final TechnologyObject<KafkaTechnologyAdapter> object, final FlexoController controller, final FlexoPerspective perspective) {
+	public ModuleView<?> createModuleViewForMasterObject(final TechnologyObject<KafkaTechnologyAdapter> object, final FlexoController controller, final FlexoPerspective perspective) {
 		if (object instanceof KafkaServer){
 			return new KafkaServerView((KafkaServer) object, controller, perspective);
 		}
@@ -105,10 +107,18 @@ public class KafkaAdapterController extends TechnologyAdapterController<KafkaTec
 		}
 		return "Connection";
 	}
-
+	
 	@Override
-	public boolean hasModuleViewForObject(TechnologyObject<KafkaTechnologyAdapter> obj, FlexoController controller) {
-		return obj instanceof KafkaTechnologyAdapter;
+	public boolean isRepresentableInModuleView(TechnologyObject<KafkaTechnologyAdapter> object) {
+		return object instanceof KafkaTechnologyAdapter;
+	}
+	
+	@Override
+	public FlexoObject getRepresentableMasterObject(TechnologyObject<KafkaTechnologyAdapter> object) {
+		if (object instanceof KafkaTechnologyAdapter) {
+			return object;
+		}
+		return null;
 	}
 }
 
