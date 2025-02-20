@@ -59,6 +59,7 @@ import org.openflexo.technologyadapter.kafka.fml.editionaction.SendRecordAction;
 import org.openflexo.technologyadapter.kafka.fml.editionaction.StartConsumerAction;
 import org.openflexo.technologyadapter.kafka.fml.editionaction.StopConsumerAction;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
+import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
 
 /**
  * Kafka consumer model slot.
@@ -71,7 +72,7 @@ import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 @DeclareFlexoBehaviours({})
 @DeclareActorReferences({ KafkaListenerActorReference.class })
 @DeclareFlexoRoles({ KafkaListenerRole.class })
-public interface KafkaModelSlot extends FreeModelSlot<KafkaServer> {
+public interface KafkaModelSlot extends FreeModelSlot<KafkaServer, KafkaResource> {
 
 	@PropertyIdentifier(type = String.class)
 	String SERVER_KEY = "server";
@@ -96,7 +97,7 @@ public interface KafkaModelSlot extends FreeModelSlot<KafkaServer> {
 	@Override
 	KafkaTechnologyAdapter getModelSlotTechnologyAdapter();
 
-	abstract class KafkaModelSlotImpl extends FreeModelSlotImpl<KafkaServer> implements KafkaModelSlot {
+	abstract class KafkaModelSlotImpl extends FreeModelSlotImpl<KafkaServer, KafkaResource> implements KafkaModelSlot {
 
 		@Override
 		public Class<KafkaTechnologyAdapter> getTechnologyAdapterClass() {
