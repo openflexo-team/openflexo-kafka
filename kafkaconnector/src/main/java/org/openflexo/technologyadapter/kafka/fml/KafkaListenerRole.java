@@ -33,7 +33,7 @@ public interface KafkaListenerRole extends FlexoRole<KafkaListener> {
 
 		@Override
 		public ActorReference<KafkaListener> makeActorReference(KafkaListener object, FlexoConceptInstance fci) {
-			AbstractVirtualModelInstanceModelFactory<?> factory = fci.getFactory();
+			AbstractVirtualModelInstanceModelFactory factory = fci.getFactory();
 			final KafkaListenerActorReference actor = factory.newInstance(KafkaListenerActorReference.class);
 			actor.setActionName(object.getActionName());
 			actor.setTopics(object.getTopics());
