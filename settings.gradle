@@ -1,2 +1,2 @@
-include 'kafkaconnector'
-include 'kafkaconnector-ui'
+include 'kafka-ta'
+include 'kafka-ta-ui'

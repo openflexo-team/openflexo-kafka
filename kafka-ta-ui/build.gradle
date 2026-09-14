@@ -1,4 +1,4 @@
 dependencies {
-    implementation project(':kafkaconnector')
+    implementation project(':kafka-ta')
     implementation flexoUi()
 }
