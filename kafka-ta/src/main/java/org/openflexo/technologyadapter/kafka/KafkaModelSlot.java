@@ -62,7 +62,7 @@ import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
 
 /**
- * Kafka consumer model slot.
+ * Kafka consumer model slot
  */
 @ModelEntity
 @XMLElement
