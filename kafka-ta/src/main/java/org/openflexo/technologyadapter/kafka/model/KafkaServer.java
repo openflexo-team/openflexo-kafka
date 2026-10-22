@@ -104,34 +104,13 @@ public interface KafkaServer extends TechnologyObject<KafkaTechnologyAdapter>, R
 
 		KafkaProducer producer = null;
 
-		private void fillCommonProperties(Properties properties) {
-			properties.put("bootstrap.servers", getServer());
-		}
-
 		@Override
 		public Properties getConsumerProperties() {
-			Properties properties = new Properties();
-			fillCommonProperties(properties);
-			// TODO what to do here ?
-			properties.put("group.id", "test");
-			properties.put("enable.auto.commit", "true");
-			properties.put("auto.commit.interval.ms", "1000");
-			properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-			properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-			return properties;
+			return KafkaClientProperties.consumerProperties(getServer());
 		}
 
 		public Properties getProducerProperties() {
-			Properties properties = new Properties();
-			fillCommonProperties(properties);
-			properties.put("acks", "all");
-			properties.put("retries", 0);
-			properties.put("batch.size", 16384);
-			properties.put("linger.ms", 1);
-			properties.put("buffer.memory", 33554432);
-			properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-			properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-			return properties;
+			return KafkaClientProperties.producerProperties(getServer());
 		}
 
 		@Override

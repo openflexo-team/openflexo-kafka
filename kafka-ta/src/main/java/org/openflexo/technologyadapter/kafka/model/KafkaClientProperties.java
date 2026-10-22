@@ -1,0 +1,78 @@
+/*
+ * Copyright (c) 2013-2017, Openflexo
+ *
+ * This file is part of Flexo-foundation, a component of the software infrastructure
+ * developed at Openflexo.
+ *
+ * Openflexo is dual-licensed under the European Union Public License (EUPL, either
+ * version 1.1 of the License, or any later version ), which is available at
+ * https://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ * and the GNU General Public License (GPL, either version 3 of the License, or any
+ * later version), which is available at http://www.gnu.org/licenses/gpl.html .
+ *
+ * You can redistribute it and/or modify under the terms of either of these licenses
+ *
+ * If you choose to redistribute it and/or modify under the terms of the GNU GPL, you
+ * must include the following additional permission.
+ *
+ *           Additional permission under GNU GPL version 3 section 7
+ *           If you modify this Program, or any covered work, by linking or
+ *           combining it with software containing parts covered by the terms
+ *           of EPL 1.0, the licensors of this Program grant you additional permission
+ *           to convey the resulting work.
+ *
+ * This software is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * See http://www.openflexo.org/license.html for details.
+ *
+ *
+ * Please contact Openflexo (openflexo-contacts@openflexo.org)
+ * or visit www.openflexo.org if you need additional information.
+ *
+ */
+
+package org.openflexo.technologyadapter.kafka.model;
+
+import java.util.Properties;
+
+/**
+ * The properties given to the Kafka clients (producer and consumer) of a {@link KafkaServer}.
+ */
+public final class KafkaClientProperties {
+
+	private KafkaClientProperties() {
+	}
+
+	/**
+	 * The properties of a consumer of the given Kafka server (comma separated list of host:port)
+	 */
+	public static Properties consumerProperties(String bootstrapServers) {
+		Properties properties = new Properties();
+		properties.put("bootstrap.servers", bootstrapServers);
+		// TODO what to do here ?
+		properties.put("group.id", "test");
+		properties.put("enable.auto.commit", "true");
+		properties.put("auto.commit.interval.ms", "1000");
+		properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+		properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+		return properties;
+	}
+
+	/**
+	 * The properties of a producer to the given Kafka server (comma separated list of host:port)
+	 */
+	public static Properties producerProperties(String bootstrapServers) {
+		Properties properties = new Properties();
+		properties.put("bootstrap.servers", bootstrapServers);
+		properties.put("acks", "all");
+		properties.put("retries", 0);
+		properties.put("batch.size", 16384);
+		properties.put("linger.ms", 1);
+		properties.put("buffer.memory", 33554432);
+		properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+		properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+		return properties;
+	}
+}

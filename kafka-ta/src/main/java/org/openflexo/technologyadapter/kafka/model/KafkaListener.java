@@ -35,6 +35,7 @@
 
 package org.openflexo.technologyadapter.kafka.model;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -201,7 +202,7 @@ public interface KafkaListener extends TechnologyObject<KafkaTechnologyAdapter>,
 		}
 
 		private synchronized Iterable<ConsumerRecord<String, String>> poll() {
-			return consumer != null ? consumer.poll(20) : null;
+			return consumer != null ? consumer.poll(Duration.ofMillis(20)) : null;
 		}
 
 		@Override
