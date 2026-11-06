@@ -1,4 +1,4 @@
-configure_kafka_server=configure_kafka_server
-connection=Connection
-create_kafka_server=create_kafka_server
-no_address_defined=no_address_defined
+configure_kafka_server=Kafka-server configureren
+connection=Verbinding
+create_kafka_server=Kafka-server maken
+no_address_defined=Geen adres gedefinieerd
