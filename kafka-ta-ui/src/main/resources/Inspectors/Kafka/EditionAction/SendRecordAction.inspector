@@ -12,7 +12,5 @@
   </TabPanel>
   <FIBVariable id="8" type="org.openflexo.technologyadapter.kafka.fml.editionaction.SendRecordAction" name="data" />
   <LocalizedDictionary id="9">
-    <Localized id="10" lang="French" value="Avancé" key="Advanced" />
-    <Localized id="11" lang="French" value="Basique" key="Basic" />
   </LocalizedDictionary>
 </Inspector>

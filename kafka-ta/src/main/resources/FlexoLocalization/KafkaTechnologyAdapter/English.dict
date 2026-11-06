@@ -1,1 +1,4 @@
+configure_kafka_server=Configure kafka server
 connection=Connection
+create_kafka_server=Create kafka server
+no_address_defined=No address defined
