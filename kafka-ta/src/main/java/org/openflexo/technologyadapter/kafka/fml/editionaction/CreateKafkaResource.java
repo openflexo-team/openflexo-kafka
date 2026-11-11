@@ -90,8 +90,6 @@ import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.technologyadapter.kafka.KafkaModelSlot;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
@@ -107,7 +105,6 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResourceFactory;
  */
 @ModelEntity
 @ImplementationClass(CreateKafkaResource.CreateKafkaResourceImpl.class)
-@XMLElement
 @FML("CreateKafkaResource")
 public interface CreateKafkaResource extends AbstractCreateResource<KafkaModelSlot, KafkaServer, KafkaTechnologyAdapter> {
 
@@ -115,14 +112,12 @@ public interface CreateKafkaResource extends AbstractCreateResource<KafkaModelSl
 	String ZOOKEEPER = "zookeeper";
 
 	@Getter(SERVER)
-	@XMLAttribute
 	DataBinding<String> getServer();
 
 	@Setter(SERVER)
 	void setServer(DataBinding<String> zookeeper);
 
 	@Getter(ZOOKEEPER)
-	@XMLAttribute
 	DataBinding<String> getZookeeper();
 
 	@Setter(ZOOKEEPER)

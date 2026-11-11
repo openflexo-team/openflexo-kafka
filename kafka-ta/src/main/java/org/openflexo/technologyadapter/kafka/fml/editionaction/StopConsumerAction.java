@@ -47,7 +47,6 @@ import org.openflexo.foundation.fml.editionaction.TechnologySpecificActionDefini
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.KafkaModelSlot;
 import org.openflexo.technologyadapter.kafka.model.KafkaListener;
 
@@ -55,7 +54,6 @@ import org.openflexo.technologyadapter.kafka.model.KafkaListener;
  * Stops a Kafka consumer action
  */
 @ModelEntity
-@XMLElement
 @ImplementationClass(StopConsumerAction.StopConsumerActionImpl.class)
 @FML("StopConsumer")
 public interface StopConsumerAction extends TechnologySpecificActionDefiningReceiver<KafkaModelSlot, KafkaListener, Boolean> {

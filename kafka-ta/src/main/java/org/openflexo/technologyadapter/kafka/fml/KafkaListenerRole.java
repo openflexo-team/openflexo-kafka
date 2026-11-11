@@ -9,13 +9,11 @@ import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.KafkaTechnologyAdapter;
 import org.openflexo.technologyadapter.kafka.fml.KafkaListenerRole.KafkaListenerRoleImpl;
 import org.openflexo.technologyadapter.kafka.model.KafkaListener;
 
 @ModelEntity
-@XMLElement
 @ImplementationClass(KafkaListenerRoleImpl.class)
 public interface KafkaListenerRole extends FlexoRole<KafkaListener> {
 

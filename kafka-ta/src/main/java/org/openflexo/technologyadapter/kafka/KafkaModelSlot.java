@@ -48,8 +48,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.KafkaModelSlot.KafkaModelSlotImpl;
 import org.openflexo.technologyadapter.kafka.fml.KafkaListenerActorReference;
 import org.openflexo.technologyadapter.kafka.fml.KafkaListenerRole;
@@ -65,7 +63,6 @@ import org.openflexo.technologyadapter.kafka.rm.KafkaResource;
  * Kafka consumer model slot
  */
 @ModelEntity
-@XMLElement
 @ImplementationClass(KafkaModelSlotImpl.class)
 @DeclareEditionActions({ CreateKafkaResource.class, SendRecordAction.class, CreateConsumerAction.class, StartConsumerAction.class,
 		StopConsumerAction.class })
@@ -81,14 +78,12 @@ public interface KafkaModelSlot extends FreeModelSlot<KafkaServer, KafkaResource
 	String ZOOKEEPER_KEY = "zookeeper";
 
 	@Getter(SERVER_KEY)
-	@XMLAttribute
 	String getServer();
 
 	@Setter(SERVER_KEY)
 	void setServer(String server);
 
 	@Getter(ZOOKEEPER_KEY)
-	@XMLAttribute
 	String getZookeeper();
 
 	@Setter(ZOOKEEPER_KEY)

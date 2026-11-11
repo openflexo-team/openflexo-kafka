@@ -49,7 +49,6 @@ import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.KafkaModelSlot;
 import org.openflexo.technologyadapter.kafka.model.KafkaListener;
 
@@ -57,7 +56,6 @@ import org.openflexo.technologyadapter.kafka.model.KafkaListener;
  * Starts a Kafka consumer action
  */
 @ModelEntity
-@XMLElement
 @ImplementationClass(StartConsumerAction.StartConsumerActionImpl.class)
 @FML("StartConsumer")
 public interface StartConsumerAction extends TechnologySpecificActionDefiningReceiver<KafkaModelSlot, KafkaListener, Boolean> {

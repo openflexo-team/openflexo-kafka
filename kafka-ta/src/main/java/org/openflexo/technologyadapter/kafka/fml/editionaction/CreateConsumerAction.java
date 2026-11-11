@@ -58,8 +58,6 @@ import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Remover;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.KafkaModelSlot;
 import org.openflexo.technologyadapter.kafka.model.KafkaListener;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
@@ -69,7 +67,6 @@ import org.openflexo.technologyadapter.kafka.model.KafkaTopic;
  * Creates a Kafka consumer action
  */
 @ModelEntity
-@XMLElement
 @ImplementationClass(CreateConsumerAction.CreateConsumerActionImpl.class)
 @FML("CreateConsumer")
 public interface CreateConsumerAction extends TechnologySpecificActionDefiningReceiver<KafkaModelSlot, KafkaServer, KafkaListener> {
@@ -82,7 +79,6 @@ public interface CreateConsumerAction extends TechnologySpecificActionDefiningRe
 
 	@Getter(value = TOPICS, cardinality = Cardinality.LIST)
 	@Embedded
-	@XMLElement
 	List<KafkaTopic> getTopics();
 
 	@Finder(collection = TOPICS)
@@ -98,7 +94,6 @@ public interface CreateConsumerAction extends TechnologySpecificActionDefiningRe
 	void setTopics(List<KafkaTopic> topics);
 
 	@Getter(ACTION_NAME)
-	@XMLAttribute
 	String getActionName();
 
 	@Setter(ACTION_NAME)

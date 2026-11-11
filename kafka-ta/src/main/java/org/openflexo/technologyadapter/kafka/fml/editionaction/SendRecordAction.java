@@ -88,8 +88,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.kafka.KafkaModelSlot;
 import org.openflexo.technologyadapter.kafka.model.KafkaServer;
 
@@ -97,7 +95,6 @@ import org.openflexo.technologyadapter.kafka.model.KafkaServer;
  * Send record through Kafka producer model slot action.
  */
 @ModelEntity
-@XMLElement
 @ImplementationClass(SendRecordAction.SendRecordActionImpl.class)
 @FML("SendRecord")
 public interface SendRecordAction extends TechnologySpecificActionDefiningReceiver<KafkaModelSlot, KafkaServer, String> {
@@ -109,14 +106,12 @@ public interface SendRecordAction extends TechnologySpecificActionDefiningReceiv
 	String RECORD_KEY = "record";
 
 	@Getter(TOPIC_KEY)
-	@XMLAttribute
 	String getTopic();
 
 	@Setter(TOPIC_KEY)
 	void setTopic(String topic);
 
 	@Getter(RECORD_KEY)
-	@XMLAttribute
 	DataBinding<String> getRecord();
 
 	@Setter(RECORD_KEY)
