@@ -70,6 +70,7 @@
 
 package org.openflexo.technologyadapter.kafka.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -125,7 +126,7 @@ public interface SendRecordAction extends TechnologySpecificActionDefiningReceiv
 		private DataBinding<String> record;
 
 		@Override
-		public String execute(RunTimeEvaluationContext evaluationContext) {
+		public String execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
 			KafkaServer kafkaServer = getReceiver(evaluationContext);
 			if (kafkaServer == null) {
