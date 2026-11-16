@@ -39,9 +39,10 @@ import java.lang.reflect.Type;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.FlexoProject;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.editionaction.TechnologySpecificActionDefiningReceiver;
@@ -66,35 +67,21 @@ public interface StartConsumerAction extends TechnologySpecificActionDefiningRec
 		private static final Logger logger = Logger.getLogger(StartConsumerAction.class.getPackage().getName());
 
 		@Override
-		public Boolean execute(RunTimeEvaluationContext evaluationContext) {
-			DataBinding<KafkaListener> receiver = getReceiver();
-			if (receiver == null) {
-				logger.warning("Receiver expression is null.");
-				return false;
+		public Boolean execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
+			KafkaListener listener = FMLEvaluation.evaluate(getReceiver(), evaluationContext, this);
+			if (listener == null) {
+				throw new FMLNullReferenceError("No Kafka consumer to start: '" + getReceiver() + "' is null");
 			}
-
-			try {
-				KafkaListener listener = receiver.getBindingValue(evaluationContext);
-				if (listener == null) {
-					logger.log(Level.WARNING, "Receiver expression '" + getReceiver() + "' is null");
-					return false;
-				}
-
-				FlexoConceptInstance instance = evaluationContext.getFlexoConceptInstance();
-				FlexoProject<?> project = null;
-				if (instance.getVirtualModelInstance().getResourceCenter() instanceof FlexoProject) {
-					project = (FlexoProject<?>) instance.getVirtualModelInstance().getResourceCenter();
-				}
-				else if (instance.getVirtualModelInstance().getResourceCenter().getDelegatingProjectResource() != null) {
-					project = instance.getVirtualModelInstance().getResourceCenter().getDelegatingProjectResource().getFlexoProject();
-				}
-				listener.start(instance, getServiceManager().getProjectLoaderService().getEditorForProject(project));
-				return true;
-
-			} catch (TypeMismatchException | NullReferenceException | ReflectiveOperationException e) {
-				logger.log(Level.WARNING, "Can't start consumer '" + getReceiver() + "'", e);
-				return false;
+			FlexoConceptInstance instance = evaluationContext.getFlexoConceptInstance();
+			FlexoProject<?> project = null;
+			if (instance.getVirtualModelInstance().getResourceCenter() instanceof FlexoProject) {
+				project = (FlexoProject<?>) instance.getVirtualModelInstance().getResourceCenter();
 			}
+			else if (instance.getVirtualModelInstance().getResourceCenter().getDelegatingProjectResource() != null) {
+				project = instance.getVirtualModelInstance().getResourceCenter().getDelegatingProjectResource().getFlexoProject();
+			}
+			listener.start(instance, getServiceManager().getProjectLoaderService().getEditorForProject(project));
+			return true;
 		}
 
 		@Override

@@ -39,9 +39,10 @@ import java.lang.reflect.Type;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.editionaction.TechnologySpecificActionDefiningReceiver;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
@@ -64,28 +65,13 @@ public interface StopConsumerAction extends TechnologySpecificActionDefiningRece
 		private static final Logger logger = Logger.getLogger(StopConsumerAction.class.getPackage().getName());
 
 		@Override
-		public Boolean execute(RunTimeEvaluationContext evaluationContext) {
-
-			DataBinding<KafkaListener> receiver = getReceiver();
-			if (receiver == null) {
-				logger.warning("Receiver expression is null.");
-				return false;
+		public Boolean execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
+			KafkaListener listener = FMLEvaluation.evaluate(getReceiver(), evaluationContext, this);
+			if (listener == null) {
+				throw new FMLNullReferenceError("No Kafka consumer to stop: '" + getReceiver() + "' is null");
 			}
-
-			try {
-				KafkaListener listener = receiver.getBindingValue(evaluationContext);
-				if (listener == null) {
-					logger.log(Level.WARNING, "Receiver expression '" + getReceiver() + "' is null");
-					return false;
-				}
-				listener.stop();
-				return true;
-
-			} catch (TypeMismatchException | NullReferenceException | ReflectiveOperationException e) {
-				logger.log(Level.WARNING, "Can't stop consumer '" + getReceiver() + "'", e);
-				return false;
-			}
-
+			listener.stop();
+			return true;
 		}
 
 		@Override

@@ -70,6 +70,10 @@
 
 package org.openflexo.technologyadapter.kafka.fml.editionaction;
 
+import org.apache.kafka.common.KafkaException;
+import org.openflexo.foundation.fml.rt.error.FMLTechnologyError;
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.concurrent.Future;
@@ -79,8 +83,6 @@ import java.util.logging.Logger;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.editionaction.TechnologySpecificActionDefiningReceiver;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
@@ -127,24 +129,19 @@ public interface SendRecordAction extends TechnologySpecificActionDefiningReceiv
 
 		@Override
 		public String execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
-
 			KafkaServer kafkaServer = getReceiver(evaluationContext);
 			if (kafkaServer == null) {
-				logger.warning("Could not access model addressed by receiver. Abort.");
-				return null;
+				throw new FMLNullReferenceError("No Kafka server to send the record to");
 			}
-
+			String valueToSend = FMLEvaluation.evaluate(getRecord(), evaluationContext, this);
 			try {
-				String valueToSend = getRecord().getBindingValue(evaluationContext);
-				Future<RecordMetadata> sent = kafkaServer.getProducer().send(new ProducerRecord<>(getTopic(), valueToSend));
-				// what to do with the result
-				return null;
-
-			} catch (TypeMismatchException | NullReferenceException | ReflectiveOperationException e) {
-				logger.log(Level.WARNING, "Can't send record '" + getRecord() + "'", e);
-				return null;
+				kafkaServer.getProducer().send(new ProducerRecord<>(getTopic(), valueToSend));
+			} catch (KafkaException e) {
+				// The producer refuses the record (serialization, closed producer, timeout of its metadata)
+				throw new FMLTechnologyError("Cannot send the record to the Kafka topic " + getTopic() + ": " + e.getMessage(), e);
 			}
-
+			// The result of the send is not waited for
+			return null;
 		}
 
 		@Override

@@ -41,9 +41,10 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.ActionScheme;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.editionaction.TechnologySpecificActionDefiningReceiver;
@@ -143,32 +144,16 @@ public interface CreateConsumerAction extends TechnologySpecificActionDefiningRe
 		}
 
 		@Override
-		public KafkaListener execute(RunTimeEvaluationContext evaluationContext) {
-			DataBinding<KafkaServer> receiver = getReceiver();
-			if (receiver == null) {
-				logger.warning("Receiver is null.");
-				return null;
+		public KafkaListener execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
+			KafkaServer kafkaServer = FMLEvaluation.evaluate(getReceiver(), evaluationContext, this);
+			if (kafkaServer == null) {
+				throw new FMLNullReferenceError("No Kafka server to create a consumer on: '" + getReceiver() + "' is null");
 			}
-
-			KafkaServer kafkaServer;
-			try {
-				kafkaServer = receiver.getBindingValue(evaluationContext);
-				if (kafkaServer == null) {
-					logger.log(Level.WARNING, "Kafka expression '" + getReceiver() + "' is null");
-					return null;
-				}
-
-				KafkaListener listener = kafkaServer.getResource().getFactory().makeNewListener(kafkaServer);
-				listener.setServer(kafkaServer);
-				listener.setTopics(getTopics());
-				listener.setActionName(getActionName());
-				return listener;
-
-			} catch (TypeMismatchException | NullReferenceException | ReflectiveOperationException e) {
-				logger.log(Level.WARNING, "Can't create  on '" + getTopics() + "'", e);
-				return null;
-			}
-
+			KafkaListener listener = kafkaServer.getResource().getFactory().makeNewListener(kafkaServer);
+			listener.setServer(kafkaServer);
+			listener.setTopics(getTopics());
+			listener.setActionName(getActionName());
+			return listener;
 		}
 
 		@Override

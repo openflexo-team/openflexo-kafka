@@ -75,12 +75,14 @@ import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.editionaction.AbstractCreateResource;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
+import org.openflexo.foundation.fml.rt.error.FMLCancellation;
+import org.openflexo.foundation.fml.rt.error.FMLInternalError;
+import org.openflexo.foundation.fml.rt.error.FMLTechnologyError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
@@ -188,17 +190,19 @@ public interface CreateKafkaResource extends AbstractCreateResource<KafkaModelSl
 				KafkaResource newResource = createResource(technologyAdapter, KafkaResourceFactory.class, evaluationContext, ".kafka",
 						true);
 				KafkaServer server = newResource.getResourceData();
-				server.setServer(getServer().getBindingValue(evaluationContext));
-				server.setZookeeper(getZookeeper().getBindingValue(evaluationContext));
+				server.setServer(FMLEvaluation.evaluate(getServer(), evaluationContext, this));
+				server.setZookeeper(FMLEvaluation.evaluate(getZookeeper(), evaluationContext, this));
 
 				return server;
-			} catch (ModelDefinitionException | FileNotFoundException | ResourceLoadingCancelledException | TypeMismatchException
-					| ReflectiveOperationException | NullReferenceException e) {
-				throw new FMLExecutionException(e);
-			} catch (SaveResourceException e) {
-				throw new FMLExecutionException(e);
-			} catch (FlexoException e) {
-				throw new FMLExecutionException(e);
+			} catch (FMLExecutionException e) {
+				// Already typed (a null name or resource center...): rethrown unchanged (CORE-F-11)
+				throw e;
+			} catch (ModelDefinitionException e) {
+				throw new FMLInternalError(e);
+			} catch (ResourceLoadingCancelledException e) {
+				throw new FMLCancellation("Loading of the new Kafka resource was cancelled", e);
+			} catch (FileNotFoundException | FlexoException e) {
+				throw new FMLTechnologyError("Cannot create the Kafka resource: " + e.getMessage(), e);
 			}
 
 		}
