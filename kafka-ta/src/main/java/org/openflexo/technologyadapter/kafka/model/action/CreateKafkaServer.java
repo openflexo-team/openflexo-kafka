@@ -74,7 +74,7 @@ import java.io.FileNotFoundException;
 import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObject.FlexoObjectImpl;
 import org.openflexo.foundation.action.FlexoAction;
@@ -164,7 +164,7 @@ public class CreateKafkaServer extends FlexoAction<CreateKafkaServer, Repository
 	}
 
 	@Override
-	protected void doAction(Object context) throws FlexoException {
+	protected void doAction(Object context) throws OpenflexoRuntimeException {
 		try {
 			KafkaTechnologyAdapter technologyAdapter = getTechnologyAdapter();
 			KafkaResourceFactory resourceFactory = technologyAdapter.getResourceFactory(KafkaResourceFactory.class);
@@ -174,7 +174,7 @@ public class CreateKafkaServer extends FlexoAction<CreateKafkaServer, Repository
 			model.setZookeeper(getZookeeper());
 
 		} catch (ModelDefinitionException | FileNotFoundException | ResourceLoadingCancelledException e) {
-			throw new FlexoException(e);
+			throw new OpenflexoRuntimeException(e);
 		}
 
 	}
